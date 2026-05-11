@@ -1,0 +1,219 @@
+/* Your custom styles */
+
+.img-header {
+    width: 100%;
+    height: 100%;
+}
+
+.white-text h1 {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+h6 {
+    line-height: 1.7;
+}
+
+.white-text h6 {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.testo-btn-header {
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+
+/* cambia il colore delle voci menu 
+
+.navbar-nav .nav-link {
+    color: red !important;
+}*/
+
+.navbar-nav li {
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.intro-2 {
+    background: url("../immagini/image-hero-1-web.jpg")no-repeat center center;
+    background-size: cover;
+}
+
+.section-heading {
+    font-weight: 800;
+    font-size: 40px;
+}
+
+.immagine-metodo {
+    padding-top: 120px;
+}
+
+.immagine-prodotti-web {
+    padding-top: 80px;
+    padding-left: 0px;
+}
+
+.blurb-settori {
+    width: 40%;
+}
+
+.testi-settori h5 {
+    font-weight: 800;
+    font-size: 30px;
+}
+
+.testi-settori p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.blurb-prodotti {
+    width: 90%;
+}
+
+.testi-prodotti h5 {
+    font-weight: 800;
+    font-size: 30px
+}
+
+.testi-prodotti p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.img-expertise img {
+    width: 90%;
+}
+
+.testi-prodotti-expertise p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.fa-colore {
+    color: #1565c0;
+}
+
+.testi-jumbotron p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.jumbotron h4 {
+    color: #1565c0;
+}
+
+.btn .fa {
+    margin-left: 3px;
+}
+
+.bg-footer {
+    background: url("../immagini/footer.jpg")no-repeat center center;
+    background-size: cover;
+}
+
+.testi-footer h5 {
+    font-weight: 800;
+    font-size: 20px
+}
+
+.testi-footer p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.scrolltop {
+    display: none;
+    width: 100%;
+    margin: 0 auto;
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+}
+
+.scroll {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: #b2b2b2;
+    background: rgba(178, 178, 178, 0.7);
+    padding: 20px;
+    text-align: center;
+    margin: 0 0 0 0;
+    cursor: pointer;
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+}
+
+.scroll:hover {
+    background: rgba(178, 178, 178, 1.0);
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+}
+
+.scroll:hover .fa {
+    padding-top: -10px;
+}
+
+.scroll .fa {
+    font-size: 30px;
+    margin-top: -5px;
+    margin-left: 1px;
+    transition: 0.5s;
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+}
+
+.top-nav-collapse {
+    background-color: #ffff !important;
+}
+
+.navbar:not(.top-nav-collapse) {
+    background: #ffff !important;
+}
+
+@media (max-width: 768px) {
+    .navbar:not(.top-nav-collapse) {
+        background: #ffff !important;
+    }
+}
+
+
+/*.hm-gradient .full-bg-img {
+    background: -moz-linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(29, 210, 177, 0.6) 100%);
+    background: -webkit-linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(29, 210, 177, 0.6) 100%);
+    background: -webkit-gradient(linear, 45deg, from(rgba(42, 27, 161, 0.6)), to(rgba(29, 210, 177, 0.6)));
+    background: -o-linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(29, 210, 177, 0.6) 100%);
+    background: linear-gradient(to 45deg, rgba(42, 27, 161, 0.6), rgba(29, 210, 177, 0.6) 100%);
+}*/
+
+@media (max-width: 450px) {
+    .margins {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+@media (max-width: 740px) {
+    .full-height,
+    .full-height body,
+    .full-height header,
+    .full-height header .view {
+        height: 1020px;
+    }
+}
