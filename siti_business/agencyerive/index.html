@@ -1,581 +1,787 @@
-<!DOCTYPE html>
-<html lang="en" class="full-height">
 
+<!doctype html>
+<html lang="it">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Agencyerive</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
-    <link href="css/style.css" rel="stylesheet">
-    <!-- Your custom font (optional) -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agencyerive — Agenzia di Servizi Digitali</title>
+<style>
+:root {
+  --bg:      oklch(98% 0.005 250);
+  --surface: oklch(100% 0 0);
+  --fg:      oklch(22% 0.02 240);
+  --muted:   oklch(50% 0.018 240);
+  --border:  oklch(90% 0.008 240);
+  --accent:  oklch(42% 0.16 265);
 
+  --font-display: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  --nav-height: 64px;
+  --max-w: 1120px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--nav-height);
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+nav .inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+nav .logo img { height: 30px; width: auto; }
+nav .logo span { font-family: var(--font-display); font-weight: 600; font-size: 1.125rem; color: var(--fg); letter-spacing: -0.02em; }
+
+nav ul { display: flex; list-style: none; gap: 4px; }
+nav ul li a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: color .2s, background .2s;
+  font-family: var(--font-body);
+}
+nav ul li a:hover, nav ul li a.active { color: var(--fg); background: var(--border); }
+
+.mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+.mobile-toggle span { display: block; width: 24px; height: 2px; background: var(--fg); border-radius: 2px; transition: .3s; }
+
+section { padding: 100px 24px; }
+section .inner { max-width: var(--max-w); margin: 0 auto; }
+
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  background: linear-gradient(160deg, oklch(28% 0.06 260) 0%, oklch(18% 0.04 260) 100%);
+  border-bottom: 1px solid var(--border);
+  padding-top: calc(var(--nav-height) + 60px);
+  padding-bottom: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 20% 20%, oklch(42% 0.16 265 / 0.15), transparent);
+  pointer-events: none;
+}
+.hero .inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.hero-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.hero-content p {
+  font-size: 1.125rem;
+  color: oklch(80% 0.02 260);
+  max-width: 480px;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.hero-image { display: flex; justify-content: center; align-items: center; }
+.hero-image img { max-width: 100%; height: auto; }
+
+.social-proof {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.social-proof .avatars { display: flex; }
+.social-proof .avatars .avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 2px solid oklch(80% 0.02 260);
+  margin-right: -10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background: oklch(35% 0.04 260);
+  color: #fff;
+}
+.social-proof .avatars .avatar:last-child { margin-right: 0; }
+.social-proof .stats { display: flex; gap: 20px; }
+.social-proof .stats .stat { display: flex; flex-direction: column; }
+.social-proof .stats .stat strong {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.social-proof .stats .stat span {
+  font-size: 0.75rem;
+  color: oklch(70% 0.02 260);
+  white-space: nowrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 30%, transparent); }
+.btn-primary:hover { box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent); transform: translateY(-1px); }
+.btn-outline-light { background: transparent; color: #fff; border: 1.5px solid oklch(70% 0.02 260); }
+.btn-outline-light:hover { border-color: #fff; background: oklch(100% 0 0 / 0.1); }
+.btn-outline { background: transparent; color: var(--fg); border: 1.5px solid var(--border); }
+.btn-outline:hover { border-color: var(--fg); background: var(--border); }
+
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--fg);
+}
+.section-header p { font-size: 1rem; color: var(--muted); max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+.servizi { background: var(--surface); }
+.service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.service-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px 32px;
+  transition: box-shadow .25s, transform .25s;
+}
+.service-card:hover { box-shadow: 0 8px 32px color-mix(in srgb, var(--fg) 6%, transparent); transform: translateY(-2px); }
+.service-card img { height: 48px; width: auto; margin-bottom: 24px; }
+.service-card h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.01em; }
+.service-card p { font-size: 0.9375rem; color: var(--muted); line-height: 1.7; }
+
+.metodo { background: var(--surface); border-top: 1px solid var(--border); }
+.metodo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.metodo-image img { max-width: 100%; height: auto; border-radius: 12px; }
+.steps { display: flex; flex-direction: column; gap: 28px; }
+.step { display: flex; gap: 20px; }
+.step-num {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.step-content h4 { font-size: 1.0625rem; font-weight: 600; margin-bottom: 6px; }
+.step-content p { font-size: 0.9375rem; color: var(--muted); line-height: 1.7; }
+
+.expertise { background: var(--bg); }
+.expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.exp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+  display: flex; gap: 16px;
+  align-items: flex-start;
+  transition: box-shadow .25s;
+}
+.exp-card:hover { box-shadow: 0 4px 20px color-mix(in srgb, var(--fg) 6%, transparent); }
+.exp-card .icon {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.exp-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+.exp-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+.chisiamo { background: var(--surface); border-top: 1px solid var(--border); }
+.chisiamo .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.chisiamo-image img { max-width: 100%; height: auto; border-radius: 12px; }
+.chisiamo-text h2 { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 20px; }
+.chisiamo-text p { font-size: 0.9375rem; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+
+.testimonianze { background: var(--bg); border-top: 1px solid var(--border); }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.testimonial-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 32px;
+  display: flex; flex-direction: column;
+  transition: box-shadow .25s, transform .25s;
+}
+.testimonial-card:hover { box-shadow: 0 8px 32px color-mix(in srgb, var(--fg) 6%, transparent); transform: translateY(-2px); }
+.testimonial-stars { color: oklch(70% 0.14 85); font-size: 1rem; letter-spacing: 2px; margin-bottom: 16px; }
+.testimonial-card blockquote {
+  font-size: 0.9375rem; line-height: 1.8; color: var(--muted);
+  font-style: italic;
+  flex: 1;
+  margin-bottom: 24px;
+}
+.testimonial-card blockquote::before { content: "\201C"; }
+.testimonial-card blockquote::after { content: "\201D"; }
+.testimonial-author { display: flex; gap: 14px; align-items: center; padding-top: 20px; border-top: 1px solid var(--border); }
+.testimonial-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600;
+  flex-shrink: 0;
+}
+.testimonial-author strong { display: block; font-size: 0.875rem; font-weight: 600; }
+.testimonial-author span { display: block; font-size: 0.8125rem; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .testimonial-grid { grid-template-columns: 1fr; }
+}
+
+.contatti { background: var(--bg); }
+.contatti-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.contatti-info { display: flex; flex-direction: column; gap: 28px; }
+.contatti-info .item { display: flex; gap: 16px; align-items: flex-start; }
+.contatti-info .item .icon {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.125rem;
+}
+.contatti-info .item h4 { font-size: 0.9375rem; font-weight: 600; margin-bottom: 2px; }
+.contatti-info .item p { font-size: 0.875rem; color: var(--muted); }
+.contatti-info .item a { color: var(--accent); text-decoration: none; }
+.contatti-info .item a:hover { text-decoration: underline; }
+
+form { display: flex; flex-direction: column; gap: 16px; }
+form input, form textarea {
+  font-family: var(--font-body);
+  padding: 12px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: var(--fg);
+  background: var(--surface);
+  outline: none;
+  transition: border-color .2s;
+}
+form input:focus, form textarea:focus { border-color: var(--accent); }
+form textarea { resize: vertical; min-height: 120px; }
+
+footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding: 48px 24px 24px;
+}
+footer .inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+footer h5 { font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 16px; }
+footer p, footer a { font-size: 0.875rem; color: var(--muted); line-height: 1.8; text-decoration: none; }
+footer a:hover { color: var(--fg); }
+footer .col p { margin-bottom: 4px; }
+footer .social { display: flex; gap: 12px; margin-top: 12px; }
+footer .social a {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: border-color .2s, color .2s;
+  text-decoration: none;
+}
+footer .social a:hover { border-color: var(--accent); color: var(--accent); }
+footer .bottom { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 20px; text-align: center; font-size: 0.8125rem; color: var(--muted); }
+
+.scrolltop {
+  position: fixed; bottom: 32px; right: 32px;
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .3s, transform .3s;
+  z-index: 90;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--fg) 8%, transparent);
+  pointer-events: none;
+}
+.scrolltop.visible { opacity: 1; pointer-events: auto; }
+.scrolltop:hover { transform: translateY(-2px); }
+.scrolltop svg { width: 20px; height: 20px; stroke: var(--muted); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 900px) {
+  .hero .inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+  .hero-content p { margin-left: auto; margin-right: auto; }
+  .social-proof { justify-content: center; }
+  .service-grid { grid-template-columns: 1fr; }
+  .metodo-grid { grid-template-columns: 1fr; }
+  .chisiamo .inner { grid-template-columns: 1fr; }
+  .expertise-grid { grid-template-columns: 1fr 1fr; }
+  .contatti-grid { grid-template-columns: 1fr; }
+  footer .inner { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  nav ul { display: none; position: fixed; top: var(--nav-height); left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; padding: 12px; }
+  nav ul.open { display: flex; }
+  .mobile-toggle { display: flex; }
+  .expertise-grid { grid-template-columns: 1fr; }
+  footer .inner { grid-template-columns: 1fr; }
+  section { padding: 60px 20px; }
+}
+.nav-cta {
+  background: var(--accent);
+  color: #fff !important;
+  padding: 8px 18px !important;
+  border-radius: 8px;
+}
+.nav-cta:hover { background: color-mix(in srgb, var(--accent) 85%, #000) !important; opacity: 1 !important; }
+</style>
+</head>
 <body>
 
-    <!--Main Navigation-->
-    <header>
+<nav>
+  <div class="inner">
+    <a class="logo" href="#">
+      <img src="immagini/logo.png" alt="Agencyerive">
+      <span>Agencyerive</span>
+    </a>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="navMenu">
+      <li><a href="#servizi">Servizi</a></li>
+      <li><a href="#metodo">Metodo</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#chisiamo">Chi siamo</a></li>
+      <li><a href="#testimonianze">Testimonianze</a></li>
+      <li><a href="#contatti" class="nav-cta">Contattaci</a></li>
+    </ul>
+  </div>
+</nav>
 
-        <!--Navbar-->
-        <nav class="navbar navbar-expand-lg navbar-light white fixed-top scrolling-navbar">
-            <div class="container">
-                <a class="navbar-brand" href="#"><img src="immagini/logo.png" height="30" alt=""></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7" aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#"><i class="fa fa-users fa-1x px-2" aria-hidden="true"></i>Chi siamo <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa fa-briefcase fa-1x px-2" aria-hidden="true"></i>Lavori</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa fa-envelope fa-1x px-2" aria-hidden="true"></i>Contattaci</a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
-
-        <!--Intro Section-->
-        <section class="view intro-2 hm-blue-strong">
-            <div class="full-bg-img">
-                <div class="container flex-center">
-                    <div class="row flex-center pt-5 mt-3">
-                        <div class="col-md-8 text-center text-md-left margins">
-                            <div class="white-text">
-                                <h6 class="wow fadeInLeft" data-wow-delay="0.3s">Lorem ipsum dolor sit amet</h6>
-                                <hr class="hr-light text-left wow fadeInLeft" data-wow-delay="0.3s">
-                                <h1 class="h1-responsive wow fadeInLeft" data-wow-delay="0.3s">LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT </h1>
-                                <br>
-                                <a class="testo-btn-header btn btn-outline-white wow fadeInLeft" data-wow-delay="0.3s">Button
-                                    
-                                    <i class="fa fa-envelope pl-2" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 wow fadeInRight d-flex justify-content-center" data-wow-delay="0.3s">
-                            <img src="immagini/Marketing-PNG-File.png" alt="" class="img-header img-responsive">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </header>
-
-    <div class="container">
-
-        <!-- Start your project here-->
-
-        <!--Inizio Section: Features Blurb v.1-->
-        <section class="section feature-box">
-
-            <!--Titolo Sezione-->
-            <h1 class="section-heading py-5 text-center">Lorem ipsum dolor</h1>
-
-            <!--Inizio Grid row-->
-            <div class="row features-big">
-
-                <!--Inizio Colonna Uno-->
-                <div class="testi-settori col-md-4 mb-r text-center">
-                    <img src="immagini/dc.svg" alt="" class="blurb-settori pb-4 wow animation fadeInDown">
-                    <h5 class="feature-title pb-1">Lorem ipsum dolor</h5>
-                    <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-                <!--Fine Colonna Uno-->
-
-                <!--Grid column-->
-                <div class="testi-settori col-md-4 mb-r text-center">
-                    <img src="immagini/wd.svg" alt="" class="blurb-settori pb-4 wow animation fadeInDown">
-                    <h5 class="feature-title pb-1">Lorem ipsum dolor</h5>
-                    <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="testi-settori col-md-4 mb-r text-center">
-                    <img src="immagini/dm.svg" alt="" class="blurb-settori pb-4 wow animation fadeInDown">
-                    <h5 class="feature-title pb-1">Lorem ipsum dolor</h5>
-                    <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-                <!--Grid column-->
-
-            </div>
-            <!--Fine Grid row-->
-
-        </section>
-    </div>
-    <!--Fine Section: Features Blurb v.1-->
-
-    <!--Inizio Section: Features Prodotti Web v.3-->
-    <section class="section feature-box blue-grey lighten-5 py-4">
-        <div class="container">
-            <!--Section heading-->
-            <h1 class="section-heading py-4 text-center">Lorem ipsum dolor</h1>
-
-            <!--Grid row-->
-            <div class="row features-small pt-2">
-
-                <!--Grid column-->
-                <div class="immagine-prodotti-web col-lg-5 mb-r center-on-small-only">
-                    <img src="immagini/web-app.png" alt="" class="img-fluid z-depth-0 wow fadeInLeft">
-                </div>
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-7 pl-5">
-
-                    <!--Grid row-->
-                    <div class="row py-4 wow fadeInRight">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/sito.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi. Fusce sapien sem, vestibulum et nisl et maximus ornare turpis.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
-                    <div class="row pb-3 wow fadeInRight">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/compasso.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi. Fusce sapien sem, vestibulum et nisl et maximus ornare turpis.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
-                    <div class="row py-4 wow fadeInRight">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/idea.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi. Fusce sapien sem, vestibulum et nisl et maximus ornare turpis.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                </div>
-                <!--Grid column-->
-
-            </div>
-            <!--Grid row-->
+<section class="hero" id="home">
+  <div class="inner">
+    <div class="hero-content">
+      <h1>Trasformiamo le tue idee in prodotti digitali di successo</h1>
+      <p>Siamo un'agenzia di servizi digitali che aiuta imprese e startup a progettare, sviluppare e far crescere la propria presenza online con strategie data-driven.</p>
+      <a href="#contatti" class="btn btn-primary">Contattaci</a>
+      <div class="social-proof">
+        <div class="avatars">
+          <div class="avatar">MR</div>
+          <div class="avatar">LG</div>
+          <div class="avatar">AB</div>
+          <div class="avatar">CS</div>
+          <div class="avatar">+</div>
         </div>
-
-    </section>
-    <!--Fine Section: Features v.3 immagine sx testo dx-->
-
-    <!--Inizio Section: Features v.3 testo sx immagine dx-->
-    <div class="container">
-        <section class="section feature-box py-4">
-
-            <!--Section heading-->
-            <h1 class="section-heading py-4 text-center">Lorem ipsum</h1>
-
-            <!--Grid row-->
-            <div class="row features-small pt-2">
-
-
-                <!--Grid column-->
-                <div class="col-lg-7 pr-5">
-
-                    <!--Grid row-->
-                    <div class="row py-4 wow fadeInLeft">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/matita-righello.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
-                    <div class="row pb-3 wow fadeInLeft">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/disegno-vettoriale.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
-                    <div class="row py-4 wow fadeInLeft">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/web-design.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                    <!--Grid row-->
-                    <div class="row py-4 wow fadeInLeft">
-                        <div class="col-4 col-md-2">
-                            <img src="immagini/cerchi.svg" alt="" class="blurb-prodotti">
-                        </div>
-                        <div class="testi-prodotti col-8 col-md-10">
-                            <h5 class="feature-title">Lorem ipsum</h5>
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi.</p>
-                        </div>
-                    </div>
-                    <!--Grid row-->
-
-                </div>
-
-                <!--Grid column-->
-                <div class="immagine-metodo col-lg-5 mb-r center-on-small-only">
-                    <img src="immagini/web-app-2.png" alt="" class="img-fluid z-depth-0 wow fadeInRight">
-                </div>
-                <!--Grid column-->
-
-            </div>
-            <!--Grid row-->
-
-        </section>
-    </div>
-    <!--Fine Section: Features v.3 testo sx immagine dx-->
-
-    <!--Jumbotron-->
-    <div class="jumbotron blue-grey lighten-5 ">
-        <div class="container">
-            <!--Title-->
-            <h1 class="section-heading card-title mt-3"><strong>Lorem ipsum dolor sit amet, consectetur adipiscing</strong></h1>
-            <!--Subtitle-->
-            <h4 class="pt-2 font-bold"><strong>Lorem ipsum dolor sit amet.</strong></h4>
-
-            <!--Text-->
-            <div class="testi-jumbotron d-flex justify-content">
-                <p class="card-text my-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi. Fusce sapien sem, vestibulum et nisl et, maximus ornare turpis. Pellentesque laoreet purus ut purus semper, ut pulvinar magna
-                    mollis. Cras felis ante, aliquet pulvinar metus non, laoreet blandit nisl.
-                    <br><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi. Fusce sapien sem, vestibulum et nisl et, maximus ornare turpis. Pellentesque laoreet purus ut purus semper, ut
-                    pulvinar magna mollis. Cras felis ante, aliquet pulvinar metus non, laoreet blandit nisl.
-                    <br><br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi. Fusce sapien sem, vestibulum et nisl et, maximus ornare turpis. Pellentesque laoreet purus ut purus semper, ut
-                    pulvinar magna mollis. Cras felis ante, aliquet pulvinar metus non, laoreet blandit nisl.
-                </p>
-            </div>
-
-            <hr class="my-4 pb-2">
-
-            <div class="text-center"><button class="testo-btn-header btn btn-blue darken-3 btn-rounded">Call to action <i class="fa fa-envelope pl-2"></i></button></div>
+        <div class="stats">
+          <div class="stat"><strong>150+</strong><span>progetti completati</span></div>
+          <div class="stat"><strong>30+</strong><span>clienti attivi</span></div>
+          <div class="stat"><strong>4.9/5</strong><span>valutazione media</span></div>
         </div>
+      </div>
     </div>
-    <!--Jumbotron-->
-
-    <!--Inizio Section: Features v.4 immagine centro testo ai lati-->
-    <section class="section feature-box py-3">
-        <div class="container">
-            <!--Section heading-->
-            <h1 class="section-heading py-4 text-center">Lorem ipsum</h1>
-
-            <!--Grid row-->
-            <div class="row features-small">
-
-                <!--Grid column-->
-                <div class="testi-prodotti col-md-4 wow fadeInLeft">
-
-                    <h5 class="feature-title pb-5 text-center">Lorem ipsum</h5>
-
-                    <!--Grid row 1-->
-                    <div class="row mb-2">
-
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black text-right">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                        <div class="col-2">
-                            <i class="fa-colore fa fa-google fa-2x"></i>
-                        </div>
-                    </div>
-                    <!--Grid row 1-->
-
-                    <!--Grid row 2-->
-                    <div class="row mb-2">
-
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black text-right">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                        <div class="col-2">
-                            <i class="fa-colore fa fa-shopping-cart fa-2x"></i>
-                        </div>
-                    </div>
-                    <!--Grid row 2-->
-
-                    <!--Grid row 3-->
-                    <div class="row mb-4">
-
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black text-right">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                        <div class="col-2">
-                            <i class="fa-colore fa fa-window-restore fa-2x"></i>
-                        </div>
-                    </div>
-                    <!--Grid row 3-->
-
-                    <!--Grid row 4-->
-                    <div class="row mb-4">
-
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black text-right">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                        <div class="col-2">
-                            <i class="fa-colore fa fa-globe fa-2x"></i>
-                        </div>
-                    </div>
-                    <!--Grid row 4-->
-
-                    <!--Grid row 5-->
-                    <div class="row mb-2">
-
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black text-right">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                        <div class="col-2">
-                            <i class="fa-colore fa fa-sitemap fa-2x"></i>
-                        </div>
-                    </div>
-                    <!--Grid row 5-->
-
-                    <!--Grid row 6-->
-                    <!-- <div class="row mb-2">
-
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black text-right">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                        <div class="col-2">
-                            <i class="fa-colore fa fa-pencil-square-o fa-2x"></i>
-                        </div>
-                    </div> -->
-                    <!--Grid row 6-->
-
-                </div>
-                <!--Grid column-->
-
-                <!--Inizio Grid column immagine centrale-->
-                <div class="img-expertise col-md-4 mb-2 center-on-small-only flex-center">
-                    <img src="immagini/expertise.png" alt="" class="z-depth-0 wow fadeInUp">
-                </div>
-                <!--Fine Grid column immagine centrale-->
-
-                <!--Inizio Grid column DX-->
-                <div class="testi-prodotti col-md-4 wow fadeInRight">
-                    <h5 class="feature-title pb-5 text-center">Lorem ipsum</h5>
-
-                    <!--Grid row 1-->
-                    <div class="row mb-3">
-                        <div class="col-2">
-                            <i class="fa fa-cogs fa-2x deep-purple-text"></i>
-                        </div>
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                    </div>
-                    <!--Grid row 1-->
-
-                    <!--Grid row 2-->
-                    <div class="row mb-4">
-                        <div class="col-2">
-                            <i class="fa fa-picture-o fa-2x deep-purple-text"></i>
-                        </div>
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                    </div>
-                    <!--Grid row 2-->
-
-                    <!--Grid row 3-->
-                    <div class="row mb-4">
-                        <div class="col-2">
-                            <i class="fa fa-bar-chart fa-2x deep-purple-text"></i>
-                        </div>
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                    </div>
-                    <!--Grid row 3-->
-
-                    <!--Grid row 4-->
-                    <div class="row mb-2">
-                        <div class="col-2">
-                            <i class="fa fa-graduation-cap fa-2x deep-purple-text"></i>
-                        </div>
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                    </div>
-                    <!--Grid row 4-->
-
-                    <!--Grid row 5-->
-                    <div class="row mb-2">
-                        <div class="col-2">
-                            <i class="fa fa-briefcase fa-2x deep-purple-text"></i>
-                        </div>
-                        <div class="testi-prodotti-expertise col-10">
-                            <p class="text-black">Lorem ipsum dolor sit amet, consectetur adipiscing</p>
-                        </div>
-                    </div>
-                    <!--Grid row 5-->
-
-                </div>
-                <!--Fine Grid column DX-->
-
-            </div>
-            <!--Grid row-->
-        </div>
-        <!--Bottone-->
-        <div class="text-center py-4"><button class="testo-btn-header btn btn-blue darken-3 btn-rounded">Call to action <i class="fa fa-envelope pl-2"></i></button></div>
-
-    </section>
-    <!--Fine section immagine al centro testo ai lati -->
-
+    <div class="hero-image">
+      <img src="immagini/Marketing-PNG-File.png" alt="Marketing digitale">
     </div>
+  </div>
+</section>
 
-    <!--Footer-->
-    <footer class="page-footer mt-0 center-on-small-only mdb-color indigo bg-footer">
-
-        <!--Footer Links-->
-        <div class="container">
-            <div class="row my-4">
-
-                <!--First column-->
-                <div class="testi-footer col-md-4 col-lg-4">
-                    <h5 class="mb-4">Agencyerive</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non sollicitudin arcu, scelerisque placerat mi.</p>
-                    <p>Lorem ipsum dolor sit amet: 12345678910</p>
-                </div>
-                <!--/.First column-->
-
-                <hr class="clearfix w-100 d-md-none">
-
-                <!--Second column-->
-                <div class="testi-footer col-md-2 col-lg-2 ml-auto">
-                    <h5 class="mb-4">Menu</h5>
-                    <ul>
-                        <p class="mb-2"><a href="#!">Home</a></p>
-                        <p class="mb-2"><a href="#!">Chi siamo</a></p>
-                        <p class="mb-2"><a href="#!">Lavori</a></p>
-                        <p class="mb-2"><a href="#!">Contattaci</a></p>
-                        <p class="mb-2"><a href="#!">Lavora con noi</a></p>
-                    </ul>
-                </div>
-                <!--/.Second column-->
-
-                <hr class="clearfix w-100 d-md-none">
-
-                <!--Third column-->
-                <div class="testi-footer col-md-4 col-lg-3">
-                    <h5 class="mb-4">Indirizzo</h5>
-                    <!--Info-->
-                    <p><i class="fa fa-home fa-2x mr-3"></i> Lorem ipsum dolor sit<br> 01487 Lorem ipsum - Italy</p>
-                    <p><i class="fa fa-envelope fa-2x mr-3"></i> info@domain.com</p>
-                    <p><i class="fa fa-phone fa-2x mr-3"></i> 0123 456 7899</p>
-                </div>
-                <!--/.Third column-->
-
-                <hr class="clearfix w-100 d-md-none">
-
-                <!--Fourth column-->
-                <div class="col-md-2 col-lg-2 text-center">
-                    <h5 class="title mb-3 font-bold">Seguici</h5>
-                    <!--Social buttons-->
-                    <div class="social-section ">
-                        <div class="py-3">
-                            <!--Facebook-->
-                            <i class="fa fa-facebook fa-2x pr-3"></i>
-                            <!--Twitter-->
-                            <i class="fa fa-twitter fa-2x pl-3"></i>
-                        </div>
-                        <!--Google +-->
-                        <p><i class="fa fa-google-plus fa-2x pr-3"></i>
-                            <!--Dribbble-->
-                            <i class="fa fa-dribbble fa-2x"></i></p>
-                    </div>
-                </div>
-                <!--/.Fourth column-->
-
-            </div>
-        </div>
-        <!--/.Footer Links-->
-
-        <!--Copyright-->
-        <div class="footer-copyright text-white">
-            <div class="container-fluid">
-                © 2017 <a href="http://www.linkforweb.com" target="_blank">Linkforweb - Web & Graphic Studio</a></Tunca> - Made in Italy with<i class="fa fa-heart pl-2" aria-hidden="true"></i>
-
-            </div>
-        </div>
-        <!--/.Copyright-->
-
-    </footer>
-    <!--/.Footer-->
-
-    <!--back to top button-->
-    <div class='scrolltop'>
-        <div class='scroll icon'><i class="fa fa-4x fa-angle-up"></i></div>
+<section class="servizi" id="servizi">
+  <div class="inner">
+    <div class="section-header">
+      <h2>I nostri servizi</h2>
+      <p>Dalla strategia alla realizzazione: accompagniamo i nostri clienti in ogni fase del percorso digitale.</p>
     </div>
-    <!--back to top button-->
+    <div class="service-grid">
+      <div class="service-card">
+        <img src="immagini/dc.svg" alt="Web Design">
+        <h3>Web Design</h3>
+        <p>Progettiamo interfacce moderne e accessibili, ponendo l'utente al centro del processo creativo. Wireframe, prototipi interattivi e design system su misura.</p>
+      </div>
+      <div class="service-card">
+        <img src="immagini/wd.svg" alt="Sviluppo Web">
+        <h3>Sviluppo Web</h3>
+        <p>Realizziamo siti e applicazioni web performanti con tecnologie aggiornate: React, Node.js, architetture cloud e deployment continuo.</p>
+      </div>
+      <div class="service-card">
+        <img src="immagini/dm.svg" alt="Digital Marketing">
+        <h3>Digital Marketing</h3>
+        <p>Strategie SEO, SEM e social media marketing per aumentare la visibilità del tuo brand e generare contatti qualificati con un ROI misurabile.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- /Start your project here-->
+<section class="metodo" id="metodo">
+  <div class="inner">
+    <div class="section-header">
+      <h2>Il nostro metodo</h2>
+      <p>Un processo consolidato in quattro fasi per portare ogni progetto dal concept al lancio con trasparenza e qualità.</p>
+    </div>
+    <div class="metodo-grid">
+      <div class="metodo-image">
+        <img src="immagini/web-app.png" alt="Il nostro metodo di lavoro">
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h4>Analisi e strategia</h4>
+            <p>Studiamo il tuo mercato, i competitor e gli obiettivi di business per definire una roadmap chiara e condivisa.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h4>Design e prototipazione</h4>
+            <p>Disegniamo l'esperienza utente con wireframe e prototipi navigabili, iterando fino al design finale approvato.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h4>Sviluppo e testing</h4>
+            <p>Scriviamo codice pulito e testabile, con revisioni continue e deployment automatici su ambienti di staging.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h4>Lancio e monitoraggio</h4>
+            <p>Rilasciamo in produzione con un piano di go-live strutturato e monitoriamo le performance per ottimizzare i risultati.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- SCRIPTS -->
-    <!-- JQuery -->
-    <script type="text/javascript " src="js/jquery-3.2.1.min.js "></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript " src="js/popper.min.js "></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript " src="js/bootstrap.min.js "></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript " src="js/mdb.min.js "></script>
+<section class="expertise" id="expertise">
+  <div class="inner">
+    <div class="section-header">
+      <h2>Aree di competenza</h2>
+      <p>Un team multidisciplinare con competenze verticali su tutto l'ecosistema digitale.</p>
+    </div>
+    <div class="expertise-grid">
+      <div class="exp-card">
+        <div class="icon">UI</div>
+        <div>
+          <h4>UI / UX Design</h4>
+          <p>Interfacce intuitive, accessibili e testate con utenti reali per garantire la migliore esperienza.</p>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="icon">FE</div>
+        <div>
+          <h4>Front-end</h4>
+          <p>React, Next.js, animazioni CSS e performance optimization per interfacce reattive e veloci.</p>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="icon">BE</div>
+        <div>
+          <h4>Back-end</h4>
+          <p>API RESTful, microservizi, database relazionali e NoSQL, autenticazione e sicurezza.</p>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="icon">SE</div>
+        <div>
+          <h4>SEO & Analytics</h4>
+          <p>Ottimizzazione per i motori di ricerca, audit tecnici e dashboard con dati actionable.</p>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="icon">CM</div>
+        <div>
+          <h4>Content Marketing</h4>
+          <p>Copywriting, strategia editoriale e content calendar per costruire autorità di marca.</p>
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="icon">CL</div>
+        <div>
+          <h4>Cloud & DevOps</h4>
+          <p>Infrastruttura AWS/Azure, CI/CD, containerizzazione e scaling automatico sotto carico.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Animations init-->
-    <script>
-        new WOW().init();
-    </script>
+<section class="chisiamo" id="chisiamo">
+  <div class="inner">
+    <div class="chisiamo-image">
+      <img src="immagini/web-app-2.png" alt="Chi siamo">
+    </div>
+    <div class="chisiamo-text">
+      <h2>Chi siamo</h2>
+      <p>Agencyerive nasce nel 2015 dalla passione di un gruppo di professionisti del digitale con esperienze complementari: design, ingegneria del software e marketing.</p>
+      <p>Oggi siamo un team di 15 persone che lavora con aziende di ogni dimensione — startup early-stage, PMI e grandi gruppi — per progetti che spaziano dal restyling di piattaforme esistenti alla creazione di prodotti digitali da zero.</p>
+      <p>Crediamo in un rapporto trasparente con il cliente, basato su stime realistiche, aggiornamenti costanti e risultati misurabili. Nessun jargon, nessuna promessa vaga: solo consegne puntuali e codice di qualità.</p>
+      <a href="#contatti" class="btn btn-primary" style="margin-top:8px">Scrivici</a>
+    </div>
+  </div>
+</section>
 
-    <!-- scroll top button-->
-    <script>
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > 50) {
-                $('.scrolltop:hidden').stop(true, true).fadeIn();
-            } else {
-                $('.scrolltop').stop(true, true).fadeOut();
-            }
+<section class="testimonianze" id="testimonianze">
+  <div class="inner">
+    <div class="section-header">
+      <h2>Cosa dicono di noi</h2>
+      <p>La fiducia dei nostri clienti è il traguardo più importante. Ecco alcune delle loro esperienze.</p>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>"Agencyerive ha ridisegnato la nostra piattaforma e-commerce da zero. Il risultato è un prodotto moderno, veloce e con un tasso di conversione aumentato del 40% nei primi tre mesi."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">MR</div>
+          <div>
+            <strong>Marco Rossi</strong>
+            <span>CEO, TechStore S.p.A.</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>"Professionalità, puntualità e competenza tecnica rara. Hanno capito le nostre esigenze in due call e in tre mesi avevamo un MVP funzionante da presentare agli investitori."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">LG</div>
+          <div>
+            <strong>Laura Gialli</strong>
+            <span>Co-fondatrice, FinApp Srl</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote>"Lavoriamo con Agencyerive da tre anni per la nostra strategia SEO e content marketing. I risultati sono costanti e misurabili: primo pagina su 15 keyword chiave del settore."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">AB</div>
+          <div>
+            <strong>Andrea Bianchi</strong>
+            <span>Head of Marketing, CloudUp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contatti" id="contatti">
+  <div class="inner">
+    <div class="section-header">
+      <h2>Contattaci</h2>
+      <p>Raccontaci del tuo progetto. Ti rispondiamo entro 24 ore con una proposta su misura.</p>
+    </div>
+    <div class="contatti-grid">
+      <div class="contatti-info">
+        <div class="item">
+          <div class="icon">&#9993;</div>
+          <div>
+            <h4>Email</h4>
+            <p><a href="mailto:info@agencyerive.com">info@agencyerive.com</a></p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="icon">&#9742;</div>
+          <div>
+            <h4>Telefono</h4>
+            <p>0123 456 7899</p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="icon">&#9906;</div>
+          <div>
+            <h4>Indirizzo</h4>
+            <p>Via Roma 123, 00187 Roma — Italia</p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="icon">&#9200;</div>
+          <div>
+            <h4>Orari</h4>
+            <p>Lun–Ven 09:00 – 18:30<br>Sabato e domenica chiusi</p>
+          </div>
+        </div>
+      </div>
+      <form id="contactForm" action="#" method="post">
+        <input type="text" name="nome" placeholder="Nome e Cognome" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="oggetto" placeholder="Oggetto">
+        <textarea name="messaggio" placeholder="Raccontaci del tuo progetto…" required></textarea>
+        <button type="submit" class="btn btn-primary">Invia richiesta</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div class="col">
+      <h5>Agencyerive</h5>
+      <p>Agenzia di servizi digitali. Progettiamo, sviluppiamo e facciamo crescere prodotti digitali con un approccio data-driven e trasparente.</p>
+      <p style="margin-top:8px">P. IVA 01234567890</p>
+    </div>
+    <div class="col">
+      <h5>Menu</h5>
+      <p><a href="#home">Home</a></p>
+      <p><a href="#servizi">Servizi</a></p>
+      <p><a href="#metodo">Metodo</a></p>
+      <p><a href="#expertise">Expertise</a></p>
+      <p><a href="#chisiamo">Chi siamo</a></p>
+      <p><a href="#testimonianze">Testimonianze</a></p>
+      <p><a href="#contatti">Contatti</a></p>
+    </div>
+    <div class="col">
+      <h5>Servizi</h5>
+      <p><a href="#servizi">Web Design</a></p>
+      <p><a href="#servizi">Sviluppo Web</a></p>
+      <p><a href="#servizi">Digital Marketing</a></p>
+      <p><a href="#expertise">Consulenza</a></p>
+    </div>
+    <div class="col">
+      <h5>Seguici</h5>
+      <div class="social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="Instagram">ig</a>
+        <a href="#" aria-label="Facebook">fb</a>
+        <a href="#" aria-label="GitHub">gh</a>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    &copy; 2025 Agencyerive — Web &amp; Digital Studio. Made with care in Italy.
+  </div>
+</footer>
+
+<div class="scrolltop" id="scrollTop" aria-label="Torna su">
+  <svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+</div>
+
+<script>
+(function() {
+  var menu = document.getElementById('navMenu');
+  var toggle = document.getElementById('mobileToggle');
+
+  toggle.addEventListener('click', function() {
+    menu.classList.toggle('open');
+    var spans = toggle.querySelectorAll('span');
+    if (menu.classList.contains('open')) {
+      spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+    } else {
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    }
+  });
+
+  menu.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      menu.classList.remove('open');
+      var spans = toggle.querySelectorAll('span');
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    });
+  });
+
+  var scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', function() {
+    scrollBtn.classList.toggle('visible', window.scrollY > 300);
+  });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = menu.querySelectorAll('a:not(.nav-cta)');
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY + 120;
+    sections.forEach(function(s) {
+      var top = s.offsetTop;
+      var bottom = top + s.offsetHeight;
+      if (scrollY >= top && scrollY < bottom) {
+        navLinks.forEach(function(l) {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + s.id);
         });
-        $(function() {
-            $(".scroll").click(function() {
-                $("html,body").animate({
-                    scrollTop: $(".intro-2").offset().top
-                }, "1000");
-                return false
-            })
-        })
-    </script>
-
-
+      }
+    });
+  });
+})();
+</script>
 </body>
-
 </html>
