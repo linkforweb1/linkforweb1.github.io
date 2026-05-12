@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forno & Farina — Pizzeria Artigianale</title>
+  <style>
+    :root {
+      --bg: oklch(97% 0.018 70);
+      --surface: oklch(99% 0.008 70);
+      --fg: oklch(22% 0.02 50);
+      --muted: oklch(50% 0.018 50);
+      --border: oklch(90% 0.014 70);
+      --accent: oklch(62% 0.20 28);
+      --accent-soft: oklch(85% 0.08 50);
+      --shadow: 0 4px 24px oklch(0% 0 0 / 0.06);
+      --radius: 16px;
+
+      --font-display: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      height: 72px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--fg);
+    }
+    .logo-mark {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), oklch(45% 0.18 30));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 18px;
+      font-family: var(--font-display);
+    }
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 600; letter-spacing: -0.01em;
+    }
+    .logo-sub {
+      font-size: 11px; color: var(--muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    .nav-desktop { display: none; gap: 32px; }
+    .nav-link {
+      text-decoration: none; color: var(--fg);
+      font-weight: 500; font-size: 15px;
+      position: relative; cursor: pointer;
+    }
+    .nav-link:hover { color: var(--accent); }
+    .nav-link.active { color: var(--accent); }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--accent);
+      transition: width 0.2s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    .cta-btn {
+      background: var(--accent); color: white;
+      padding: 10px 20px; border-radius: 100px;
+      text-decoration: none; font-weight: 600; font-size: 14px;
+      border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px oklch(0% 0 0 / 0.12); }
+
+    .menu-toggle {
+      display: flex; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 8px;
+    }
+    .menu-toggle span {
+      width: 24px; height: 2px; background: var(--fg);
+      transition: all 0.3s ease;
+    }
+    .menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.open span:nth-child(2) { opacity: 0; }
+    .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile Drawer */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: oklch(0% 0 0 / 0.4);
+      z-index: 200; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .drawer-overlay.open { opacity: 1; visibility: visible; }
+
+    .drawer {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 280px;
+      background: var(--surface); z-index: 201;
+      transform: translateX(-100%); transition: transform 0.3s ease;
+      padding: 80px 32px 32px;
+    }
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-link {
+      display: block; padding: 14px 0;
+      font-size: 18px; font-weight: 500; color: var(--fg);
+      text-decoration: none; border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .drawer-link:hover, .drawer-link.active { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-pattern {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 32px 32px; opacity: 0.5;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .eyebrow {
+      display: inline-block; padding: 6px 16px;
+      background: var(--accent-soft); color: var(--accent);
+      border-radius: 100px; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 600; line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted); max-width: 620px; margin: 0 auto 32px;
+    }
+    .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-secondary {
+      background: var(--surface); color: var(--fg);
+      padding: 12px 28px; border-radius: 100px;
+      text-decoration: none; font-weight: 600; font-size: 15px;
+      border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--muted); transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--accent); color: white;
+      padding: 12px 28px; border-radius: 100px;
+      text-decoration: none; font-weight: 600; font-size: 15px;
+      border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px oklch(0% 0 0 / 0.15); }
+
+    /* Hero Image */
+    .hero-image {
+      margin-top: 48px; border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+      position: relative;
+    }
+    .hero-image-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--accent); font-family: var(--font-display);
+    }
+    .pizza-icon {
+      font-size: 80px; margin-bottom: 16px; opacity: 0.6;
+    }
+    .hero-image-caption {
+      font-size: 18px; color: var(--muted); font-family: var(--font-body);
+    }
+
+    /* Section common */
+    .section { padding: 80px 0; }
+    .section-header { text-align: center; margin-bottom: 48px; }
+    .section-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 600; letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .section-header p { color: var(--muted); font-size: 17px; max-width: 560px; margin: 0 auto; }
+
+    /* Features */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature-card {
+      background: var(--surface); padding: 32px; border-radius: var(--radius);
+      border: 1px solid var(--border); transition: all 0.2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent-soft); display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-family: var(--font-display); font-size: 20px; font-weight: 600; margin-bottom: 8px;
+    }
+    .feature-card p { color: var(--muted); font-size: 15px; }
+
+    /* Menu */
+    .menu-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+    .menu-tab {
+      padding: 10px 20px; border-radius: 100px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: 14px; font-weight: 500; cursor: pointer; color: var(--fg);
+      transition: all 0.2s;
+    }
+    .menu-tab:hover { border-color: var(--muted); }
+    .menu-tab.active {
+      background: var(--accent); color: white; border-color: var(--accent);
+    }
+
+    .menu-category { display: none; }
+    .menu-category.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+
+    .menu-item {
+      background: var(--surface); padding: 24px; border-radius: var(--radius);
+      border: 1px solid var(--border); display: flex; gap: 20px;
+      transition: all 0.2s;
+    }
+    .menu-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .menu-item-img {
+      width: 96px; height: 96px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+      display: flex; align-items: center; justify-content: center; font-size: 40px;
+    }
+    .menu-item-content { flex: 1; }
+    .menu-item-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+    .menu-item h4 { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+    .menu-item-price { color: var(--accent); font-weight: 600; font-size: 16px; }
+    .menu-item p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .menu-item-badge {
+      display: inline-block; margin-top: 8px; padding: 4px 10px;
+      background: var(--accent-soft); color: var(--accent);
+      border-radius: 6px; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* Story / Chi Siamo */
+    .story-section { background: var(--surface); }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    @media (max-width: 768px) { .story-grid { grid-template-columns: 1fr; } }
+    .story-content h2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 600; letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .story-content p { color: var(--muted); margin-bottom: 16px; font-size: 16px; }
+    .story-image {
+      aspect-ratio: 4 / 3; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent-soft), var(--bg));
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 64px;
+    }
+    .story-image-caption { font-family: var(--font-display); color: var(--muted); margin-top: 16px; font-size: 16px; }
+
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 60px; }
+    .team-card { background: var(--bg); padding: 32px; border-radius: var(--radius); text-align: center; border: 1px solid var(--border); }
+    .team-avatar {
+      width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 16px;
+      background: linear-gradient(135deg, var(--accent), oklch(45% 0.18 30));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-family: var(--font-display); font-weight: 600; font-size: 28px;
+    }
+    .team-card h4 { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .team-role { color: var(--accent); font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+    .team-card p { color: var(--muted); font-size: 14px; }
+
+    /* Gallery */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .gallery-item {
+      aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; position: relative; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .gallery-item:hover { transform: scale(1.02); }
+    .gallery-item-inner {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 52px;
+    }
+    .gallery-item:nth-child(odd) .gallery-item-inner { background: linear-gradient(135deg, var(--accent-soft), var(--surface)); }
+    .gallery-item:nth-child(even) .gallery-item-inner { background: linear-gradient(135deg, var(--surface), oklch(92% 0.02 70)); }
+    .gallery-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 16px;
+      background: linear-gradient(to top, oklch(0% 0 0 / 0.6), transparent);
+      color: white; font-weight: 600; font-size: 14px;
+    }
+
+    /* Reviews */
+    .reviews-section { background: var(--surface); }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .review-card {
+      background: var(--bg); padding: 32px; border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .review-stars { color: var(--accent); font-size: 20px; margin-bottom: 16px; }
+    .review-text { color: var(--fg); font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--muted), var(--border));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 600; font-size: 16px;
+    }
+    .review-name { font-weight: 600; font-size: 15px; }
+    .review-date { color: var(--muted); font-size: 13px; }
+
+    /* Social Feed */
+    .social-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .social-item {
+      aspect-ratio: 1; border-radius: 12px; overflow: hidden;
+      background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; position: relative; cursor: pointer; transition: transform 0.2s;
+    }
+    .social-item:hover { transform: scale(1.03); }
+    .social-overlay {
+      position: absolute; inset: 0;
+      background: oklch(0% 0 0 / 0.3); opacity: 0; transition: opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      color: white; font-size: 14px; font-weight: 600;
+    }
+    .social-item:hover .social-overlay { opacity: 1; }
+
+    /* Contacts */
+    .contacts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    @media (max-width: 768px) { .contacts-grid { grid-template-columns: 1fr; } }
+
+    .contact-card {
+      background: var(--surface); padding: 24px; border-radius: var(--radius);
+      border: 1px solid var(--border); margin-bottom: 16px;
+    }
+    .contact-card h4 { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+    .contact-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; font-size: 15px; }
+    .contact-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+
+    .booking-form { background: var(--surface); padding: 32px; border-radius: var(--radius); border: 1px solid var(--border); }
+    .booking-form h3 { font-family: var(--font-display); font-size: 24px; font-weight: 600; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--bg);
+      font-family: var(--font-body); font-size: 15px; color: var(--fg);
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+    .submit-btn {
+      width: 100%; background: var(--accent); color: white;
+      padding: 14px; border-radius: 10px; border: none;
+      font-family: var(--font-body); font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .submit-btn:hover { box-shadow: 0 6px 24px oklch(0% 0 0 / 0.15); transform: translateY(-1px); }
+
+    /* Footer */
+    .footer { background: oklch(22% 0.02 50); color: var(--surface); padding: 60px 0 32px; margin-top: 40px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; margin-bottom: 40px; }
+    .footer-brand .logo-text { color: var(--surface); }
+    .footer-brand .logo-sub { color: oklch(60% 0.015 50); }
+    .footer-brand p { color: oklch(65% 0.015 50); font-size: 14px; margin-top: 16px; line-height: 1.6; }
+    .footer-col h4 { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; color: oklch(75% 0.015 50); }
+    .footer-col a, .footer-col p { display: block; color: oklch(65% 0.015 50); font-size: 14px; padding: 6px 0; text-decoration: none; cursor: pointer; }
+    .footer-col a:hover { color: var(--accent-soft); }
+    .footer-bottom { border-top: 1px solid oklch(30% 0.02 50); padding-top: 24px; color: oklch(55% 0.015 50); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    /* Desktop nav show */
+    @media (min-width: 768px) {
+      .nav-desktop { display: flex; align-items: center; gap: 32px; }
+      .menu-toggle { display: none; }
+      .hero { padding: 100px 0 80px; }
+    }
+
+    /* Page nav helpers */
+    .back-to-top {
+      position: fixed; bottom: 24px; right: 24px; z-index: 50;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--accent); color: white; border: none; cursor: pointer;
+      display: none; align-items: center; justify-content: center; font-size: 18px;
+      box-shadow: var(--shadow); transition: transform 0.2s;
+    }
+    .back-to-top:hover { transform: translateY(-2px); }
+    .back-to-top.visible { display: flex; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" data-nav="home">
+      <div class="logo-mark">FF</div>
+      <div>
+        <div class="logo-text">Forno & Farina</div>
+        <div class="logo-sub">Pizzeria Artigianale</div>
+      </div>
+    </a>
+
+    <nav class="nav-desktop">
+      <span class="nav-link active" data-nav="home">Home</span>
+      <span class="nav-link" data-nav="menu">Menu</span>
+      <span class="nav-link" data-nav="about">Chi Siamo</span>
+      <span class="nav-link" data-nav="gallery">Galleria</span>
+      <span class="nav-link" data-nav="contacts">Contatti</span>
+      <button class="cta-btn" data-nav="contacts">Prenota Tavolo</button>
+    </nav>
+
+    <button class="menu-toggle" id="menuToggle">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <span class="drawer-link active" data-nav="home">Home</span>
+  <span class="drawer-link" data-nav="menu">Menu</span>
+  <span class="drawer-link" data-nav="about">Chi Siamo</span>
+  <span class="drawer-link" data-nav="gallery">Galleria</span>
+  <span class="drawer-link" data-nav="contacts">Contatti</span>
+  <div style="margin-top: 32px;">
+    <button class="btn-primary" data-nav="contacts" style="width: 100%;">Prenota Tavolo</button>
+  </div>
+</div>
+
+<!-- Main content -->
+<main>
+
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
+
+    <section class="hero">
+      <div class="hero-pattern"></div>
+      <div class="container hero-content">
+        <div class="eyebrow">Dal 1986 — Forno a legna</div>
+        <h1>Pizza vera,<br>fatta con il cuore</h1>
+        <p>Impasto lievitato 72 ore, pomodoro San Marzano, mozzarella di bufala e ingredienti selezionati ogni giorno. Una tradizione di famiglia dal 1986.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" data-nav="menu">Scopri il Menu</button>
+          <button class="btn-secondary" data-nav="contacts">Prenota Ora</button>
+        </div>
+        <div class="hero-image">
+          <div class="hero-image-placeholder">
+            <div class="pizza-icon">🍕</div>
+            <div class="hero-image-caption">La nostra Margherita — fatta a mano, cotta in forno a legna</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔥</div>
+            <h3>Forno a legna</h3>
+            <p>Cottura tradizionale a 420°C per quel bordo croccante e profumo inconfondibile che solo il legno sa dare.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <h3>Lievitazione 72h</h3>
+            <p>Impasto lungo e lento a temperatura controllata. Più digeribile, più buono, fatto per durare nel sapore.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🥬</div>
+            <h3>Ingredienti del giorno</h3>
+            <p>Frutta e verdura dal mercato locale, ogni mattina. Non c'è frigo per il fresco — c'è il mercato.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">👨‍👩‍👧</div>
+            <h3>Storia di famiglia</h3>
+            <p>Tre generazioni di pizzaioli. Da nonno Giuseppe a papà Luca, ad oggi. La ricetta cambia poco: passione e tecnica.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="background: var(--surface);">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Più ordinati</div>
+          <h2>Le specialità della casa</h2>
+          <p>Queste sono le pizze che i nostri clienti ripetono ogni settimana. Prova anche tu.</p>
+        </div>
+        <div class="menu-category active">
+          <div class="menu-item">
+            <div class="menu-item-img">🍕</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header">
+                <h4>Margherita DOC</h4>
+                <span class="menu-item-price">€ 8,50</span>
+              </div>
+              <p>Pomodoro San Marzano, mozzarella di bufala DOP, basilico fresco, olio evo.</p>
+              <span class="menu-item-badge">Classic</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🫶</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header">
+                <h4>Bufala e Rucola</h4>
+                <span class="menu-item-price">€ 11,00</span>
+              </div>
+              <p>Mozzarella di bufala, rucola fresca, pomodoro, parmigiano reggiano scaglie.</p>
+              <span class="menu-item-badge">Best Seller</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍄</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header">
+                <h4>Porcini e Salsiccia</h4>
+                <span class="menu-item-price">€ 13,00</span>
+              </div>
+              <p>Funghi porcini freschi, salsiccia toscana, mozzarella fiordilatte, pepe nero.</p>
+              <span class="menu-item-badge">Autunno</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+          <button class="btn-secondary" data-nav="menu">Vedi tutto il Menu →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reviews-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Dicono di noi</div>
+          <h2>Recensioni dei clienti</h2>
+          <p>La miglior pubblicità è la parola dei nostri clienti. Oltre 1200 recensioni 5 stelle su Google.</p>
+        </div>
+        <div class="reviews-grid">
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"La migliore pizza della zona. Impasto leggerissimo, digeribile anche alle 23 di sera. Bordo croccante e ingredienti sempre freschissimi. Torniamo ogni venerdì sera da oltre due anni."</p>
+            <div class="review-author">
+              <div class="review-avatar">MR</div>
+              <div>
+                <div class="review-name">Marco Rossi</div>
+                <div class="review-date">Cliente abituale dal 2022</div>
+              </div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Abbiamo festeggiato il battesimo di nostra figlia con 40 persone. Personale gentilissimo, organizzazione perfetta, pizze arrivate tutte calde e in tempo. Consiglio vivamente per le cerimonie."</p>
+            <div class="review-author">
+              <div class="review-avatar">LB</div>
+              <div>
+                <div class="review-name">Laura Bianchi</div>
+                <div class="review-date">Google · 2 settimane fa</div>
+              </div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Da napoletano che vive al nord, trovare una pizza così è raro. Impasto alto, lievitazione perfetta, non brucia sul fondo. La bufala e rucola è manna dal cielo. Davvero consigliatissimo."</p>
+            <div class="review-author">
+              <div class="review-avatar">GE</div>
+              <div>
+                <div class="review-name">Giuseppe Esposito</div>
+                <div class="review-date">TripAdvisor</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">@fornoefarina</div>
+          <h2>Seguici su Instagram</h2>
+          <p>Ogni giorno foto fresche dal forno. E ogni tanto qualche ricetta segreta.</p>
+        </div>
+        <div class="social-grid">
+          <div class="social-item">
+            🍕
+            <div class="social-overlay">❤️ 234</div>
+          </div>
+          <div class="social-item">
+            🔥
+            <div class="social-overlay">❤️ 189</div>
+          </div>
+          <div class="social-item">
+            🥗
+            <div class="social-overlay">❤️ 156</div>
+          </div>
+          <div class="social-item">
+            🍰
+            <div class="social-overlay">❤️ 201</div>
+          </div>
+          <div class="social-item">
+            👨‍🍳
+            <div class="social-overlay">❤️ 312</div>
+          </div>
+          <div class="social-item">
+            🍷
+            <div class="social-overlay">❤️ 143</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MENU PAGE -->
+  <div class="page" id="page-menu">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Il nostro</div>
+          <h2>Menù completo</h2>
+          <p>Dagli antipasti ai dessert, tutto fatto in casa con ingredienti del giorno. I prezzi includono servizio.</p>
+        </div>
+
+        <div class="menu-tabs">
+          <button class="menu-tab active" data-tab="antipasti">Antipasti</button>
+          <button class="menu-tab" data-tab="pizze">Pizze</button>
+          <button class="menu-tab" data-tab="bibite">Bibite</button>
+          <button class="menu-tab" data-tab="dessert">Dessert</button>
+        </div>
+
+        <div id="tab-antipasti" class="menu-category active">
+          <div class="menu-item">
+            <div class="menu-item-img">🥖</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Bruschetta al pomodoro</h4><span class="menu-item-price">€ 5,00</span></div>
+              <p>Pane casereccio tostato, pomodoro fresco, aglio, basilico, olio evo.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🧀</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Tagliere misto</h4><span class="menu-item-price">€ 14,00</span></div>
+              <p>Salame toscano, prosciutto crudo, coppa, pecorino, parmigiano, miele, noci.</p>
+              <span class="menu-item-badge">Consigliato</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🥗</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Insalata Caprese</h4><span class="menu-item-price">€ 8,00</span></div>
+              <p>Mozzarella di bufala, pomodoro a fette, basilico fresco, olio evo.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍤</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Fritto misto</h4><span class="menu-item-price">€ 12,00</span></div>
+              <p>Gamberi, calamari, verdure in pastella. Servito con limone e maionese.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🫒</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Olive all'ascolana</h4><span class="menu-item-price">€ 7,00</span></div>
+              <p>Olive grandi verdi ripiene di carne, panate e fritte. Tipiche delle Marche.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🥒</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Verdure grigliate</h4><span class="menu-item-price">€ 6,00</span></div>
+              <p>Melanzane, zucchine, peperoni grigliati con olio, sale e rosmarino.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-pizze" class="menu-category">
+          <div class="menu-item">
+            <div class="menu-item-img">🍕</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Margherita</h4><span class="menu-item-price">€ 7,50</span></div>
+              <p>Pomodoro San Marzano, mozzarella fiordilatte, basilico, olio evo.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">👑</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Margherita DOC</h4><span class="menu-item-price">€ 8,50</span></div>
+              <p>Pomodoro San Marzano, mozzarella di bufala DOP, basilico, olio evo.</p>
+              <span class="menu-item-badge">Classic</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🫶</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Bufala e Rucola</h4><span class="menu-item-price">€ 11,00</span></div>
+              <p>Mozzarella di bufala, rucola fresca, pomodoro, parmigiano in scaglie.</p>
+              <span class="menu-item-badge">Best Seller</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🥓</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Prosciutto e Funghi</h4><span class="menu-item-price">€ 9,50</span></div>
+              <p>Pomodoro, mozzarella, prosciutto cotto, funghi champignon.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🫑</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Vegetariana</h4><span class="menu-item-price">€ 9,00</span></div>
+              <p>Pomodoro, mozzarella, peperoni, zucchine, melanzane, funghi.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🧄</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Quattro Formaggi</h4><span class="menu-item-price">€ 10,50</span></div>
+              <p>Mozzarella, gorgonzola, fontina, parmigiano reggiano.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🌶️</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Diavola</h4><span class="menu-item-price">€ 10,00</span></div>
+              <p>Pomodoro, mozzarella, salame piccante, peperoncino fresco.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍄</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Porcini e Salsiccia</h4><span class="menu-item-price">€ 13,00</span></div>
+              <p>Funghi porcini freschi, salsiccia toscana, mozzarella fiordilatte, pepe nero.</p>
+              <span class="menu-item-badge">Stagione</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🐟</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Frutti di Mare</h4><span class="menu-item-price">€ 14,00</span></div>
+              <p>Pomodoro, mozzarella, gamberi, calamari, vongole, prezzemolo.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🧀</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Gorgonzola, Noci e Pere</h4><span class="menu-item-price">€ 11,50</span></div>
+              <p>Gorgonzola, noci, pere a fette, mozzarella, crema di parmigiano.</p>
+              <span class="menu-item-badge">Specialità</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍳</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Contadina</h4><span class="menu-item-price">€ 10,50</span></div>
+              <p>Pomodoro, mozzarella, salsiccia, friarielli, pecorino romano.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🧅</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Tonno e Cipolla</h4><span class="menu-item-price">€ 9,50</span></div>
+              <p>Pomodoro, mozzarella, tonno, cipolla rossa di Tropea.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-bibite" class="menu-category">
+          <div class="menu-item">
+            <div class="menu-item-img">💧</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Acqua naturale</h4><span class="menu-item-price">€ 2,00</span></div>
+              <p>1L</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">💦</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Acqua frizzante</h4><span class="menu-item-price">€ 2,00</span></div>
+              <p>1L</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍺</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Birra alla spina</h4><span class="menu-item-price">€ 4,50</span></div>
+              <p>Pilsner 0,4L</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍻</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Birra artigianale</h4><span class="menu-item-price">€ 6,00</span></div>
+              <p>IPA / Blanche / Ambrata — bottiglia 0,33L</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍷</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Vino rosso della casa</h4><span class="menu-item-price">€ 5,00</span></div>
+              <p>Calice 0,15L</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍾</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Vino rosso — bottiglia</h4><span class="menu-item-price">€ 18,00</span></div>
+              <p>Montepulciano d'Abruzzo DOC</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🥤</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Coca-Cola</h4><span class="menu-item-price">€ 3,00</span></div>
+              <p>Lattina 0,33L</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍋</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Limonata</h4><span class="menu-item-price">€ 3,00</span></div>
+              <p>Siciliana, spremuta fresca</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍊</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Aranciata</h4><span class="menu-item-price">€ 3,00</span></div>
+              <p>Siciliana</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">☕</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Caffè</h4><span class="menu-item-price">€ 1,50</span></div>
+              <p>Espresso / Macchiato</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-dessert" class="menu-category">
+          <div class="menu-item">
+            <div class="menu-item-img">🍮</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Tiramisù</h4><span class="menu-item-price">€ 6,00</span></div>
+              <p>Uova fresche, mascarpone, savoiardi, caffè, cacao amaro. Fatto in casa.</p>
+              <span class="menu-item-badge">Fatto in casa</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍰</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Panna Cotta</h4><span class="menu-item-price">€ 5,00</span></div>
+              <p>Panna fresca, gelatina, servita con coulis di frutti rossi o cioccolato.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍫</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Soufflè al cioccolato</h4><span class="menu-item-price">€ 7,00</span></div>
+              <p>Caldo, cuore fondente, servito con panna montata.</p>
+              <span class="menu-item-badge">Consigliato</span>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍋</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Delizia al limone</h4><span class="menu-item-price">€ 5,50</span></div>
+              <p>Torta soffusa con crema pasticcera al limone e glassa.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍨</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Gelato artigianale</h4><span class="menu-item-price">€ 4,00</span></div>
+              <p>3 gusti: stracciatella, nocciola, pistacchio, limone, fragola.</p>
+            </div>
+          </div>
+          <div class="menu-item">
+            <div class="menu-item-img">🍓</div>
+            <div class="menu-item-content">
+              <div class="menu-item-header"><h4>Fragole con panna</h4><span class="menu-item-price">€ 5,50</span></div>
+              <p>Fragole fresche di stagione, panna montata zuccherata.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div class="page" id="page-about">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">La nostra</div>
+          <h2>Storia</h2>
+          <p>Dal 1986 tre generazioni di pizzaioli nella stessa pizzeria. La tecnica cambia poco: passione, tempo e ingredienti buoni.</p>
+        </div>
+
+        <div class="story-grid">
+          <div class="story-image">
+            👨‍🍳
+            <div class="story-image-caption">Nonno Giuseppe — 1986</div>
+          </div>
+          <div class="story-content">
+            <h2>Quando la pizza è una questione di famiglia</h2>
+            <p>Nel 1986 nonno Giuseppe apre la sua prima pizzeria in un piccolo locale in centro. Un forno a legna importato direttamente da Napoli, un impasto che lavorava a mano per ore, e l'abitudine di stare dietro al bancone fino a tarda notte a chiacchierare con i clienti.</p>
+            <p>Nel 2004 tocca a papà Luca prendere in mano le redini. Stesso forno, stessa ricetta dell'impasto, ma con un occhio in più alla qualità degli ingredienti: inizia i rapporti diretti con i produttori della zona, i contadini del mercato, i caseifici.</p>
+            <p>Oggi siamo alla terza generazione. Lo stesso forno, la stessa passione, la stessa idea: la pizza buona non ha bisogno di trucchi. Ha bisogno di tempo, di ingredienti buoni, e di chi la fa con il cuore.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section story-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">La squadra</div>
+          <h2>Chi c'è dietro al banco</h2>
+          <p>Ogni pizza ha la sua firma. E ogni firma appartiene a qualcuno che ci mette passione da anni.</p>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-avatar">L</div>
+            <h4>Luca</h4>
+            <div class="team-role">Pizzaiolo / Proprietario</div>
+            <p>Dietro al forno da 35 anni. Ogni impasto lo tocca ancora con mano per capire se è pronto.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">M</div>
+            <h4>Marco</h4>
+            <div class="team-role">Sala e Gestione</div>
+            <p>Ricorda il nome di tutti i clienti abituali. E anche il loro ordine preferito.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">S</div>
+            <h4>Sara</h4>
+            <div class="team-role">Cucina e Dolci</div>
+            <p>Tutti i dessert sono fatti da lei. Il tiramisù è una ricetta di famiglia che non rivela a nessuno.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">R</div>
+            <h4>Roberto</h4>
+            <div class="team-role">Giovane Pizzaiolo</div>
+            <p>Terza generazione. Impara da Luca dal 2019. Sta già sperimentando i suoi primi condimenti stagionali.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Cosa vuol dire</div>
+          <h2>Forno a legna</h2>
+          <p>Non è un modo di dire. È la differenza tra una pizza e la pizza.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🌡️</div>
+            <h3>420 gradi costanti</h3>
+            <p>Il forno a legna raggiunge e mantiene temperature impossibili per un forno elettrico. La pizza cuoce in 90 secondi.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔥</div>
+            <h3>Calore diretto e indiretto</h3>
+            <p>Il calore viene sia dal basso (pavimento refrattario) che dall'alto (volta del forno). Il bordo si gonfia, il fondo non brucia.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">👃</div>
+            <h3>Quel profumo in più</h3>
+            <p>Il legno brucia, il fumo passa, la pizza assorbe qualcosa in più che nessun forno elettrico potrà mai darti.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- GALLERY PAGE -->
+  <div class="page" id="page-gallery">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Foto dal vivo</div>
+          <h2>Galleria</h2>
+          <p>Un assaggio di quello che troverai da Forno & Farina. Tutte le foto sono vere, senza filtri.</p>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🍕</div>
+            <div class="gallery-caption">Margherita DOC appena sfornata</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🔥</div>
+            <div class="gallery-caption">Il forno a legna in azione</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">👨‍🍳</div>
+            <div class="gallery-caption">Luca che stende la pizza</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🏠</div>
+            <div class="gallery-caption">L'ingresso della pizzeria</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🥗</div>
+            <div class="gallery-caption">Insalata Caprese freschissima</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🍮</div>
+            <div class="gallery-caption">Il tiramisù fatto in casa</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🍻</div>
+            <div class="gallery-caption">Serata con gli amici</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🌿</div>
+            <div class="gallery-caption">Basilico fresco del giorno</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🍷</div>
+            <div class="gallery-caption">La cantina dei vini</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🎂</div>
+            <div class="gallery-caption">Una festa di compleanno</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🧀</div>
+            <div class="gallery-caption">Il tagliere degli antipasti</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-item-inner">🌙</div>
+            <div class="gallery-caption">Pizzeria illuminata la sera</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACTS PAGE -->
+  <div class="page" id="page-contacts">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Dove e quando</div>
+          <h2>Contatti e Prenotazioni</h2>
+          <p>Chiamaci o compila il form qui sotto. Per gruppi oltre 8 persone consigliamo sempre di prenotare.</p>
+        </div>
+
+        <div class="contacts-grid">
+          <div>
+            <div class="contact-card">
+              <h4>📍 Dove siamo</h4>
+              <div class="contact-row">
+                <div class="contact-icon">🏠</div>
+                <div>Via Roma, 47<br>20121 Milano (MI)</div>
+              </div>
+              <div class="contact-row">
+                <div class="contact-icon">🚇</div>
+                <div>Metro Duomo, linea 1 e 3<br>5 minuti a piedi</div>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <h4>⏰ Orari</h4>
+              <div class="contact-row">
+                <div class="contact-icon">☀️</div>
+                <div><strong>Pranzo</strong><br>Tutti i giorni: 12:00 — 15:00</div>
+              </div>
+              <div class="contact-row">
+                <div class="contact-icon">🌙</div>
+                <div><strong>Cena</strong><br>Tutti i giorni: 19:00 — 23:30</div>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <h4>📞 Contatti rapidi</h4>
+              <div class="contact-row">
+                <div class="contact-icon">📱</div>
+                <div>Telefono<br><strong>+39 02 12345678</strong></div>
+              </div>
+              <div class="contact-row">
+                <div class="contact-icon">✉️</div>
+                <div>Email<br><strong>info@fornoefarina.it</strong></div>
+              </div>
+              <div class="contact-row">
+                <div class="contact-icon">📸</div>
+                <div>Instagram<br><strong>@fornoefarina</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="booking-form">
+              <h3>Prenota un tavolo</h3>
+              <form id="bookingForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" placeholder="Il tuo nome" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Cognome</label>
+                    <input type="text" placeholder="Il tuo cognome" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="la@email.com" required>
+                </div>
+                <div class="form-group">
+                  <label>Telefono</label>
+                  <input type="tel" placeholder="+39 333 1234567">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Data</label>
+                    <input type="date" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Ora</label>
+                    <select required>
+                      <option value="">Scegli orario</option>
+                      <option>12:00</option>
+                      <option>12:30</option>
+                      <option>13:00</option>
+                      <option>13:30</option>
+                      <option>19:00</option>
+                      <option>19:30</option>
+                      <option>20:00</option>
+                      <option>20:30</option>
+                      <option>21:00</option>
+                      <option>21:30</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Persone</label>
+                  <select required>
+                    <option value="">Numero di persone</option>
+                    <option>1 persona</option>
+                    <option>2 persone</option>
+                    <option>3 persone</option>
+                    <option>4 persone</option>
+                    <option>5 persone</option>
+                    <option>6 persone</option>
+                    <option>7 persone</option>
+                    <option>8 persone</option>
+                    <option>9+ (contattaci)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Note (opzionale)</label>
+                  <textarea rows="3" placeholder="Celebrazioni, intolleranze, preferenze..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Invia Prenotazione</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" data-nav="home">
+          <div class="logo-mark" style="width: 36px; height: 36px; font-size: 16px;">FF</div>
+          <div>
+            <div class="logo-text" style="font-size: 18px;">Forno & Farina</div>
+            <div class="logo-sub">Pizzeria Artigianale</div>
+          </div>
+        </a>
+        <p>Dal 1986. Forno a legna, lievitazione 72 ore, ingredienti del mercato. Tre generazioni di pizzaioli nella stessa pizzeria.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pagine</h4>
+        <a data-nav="home">Home</a>
+        <a data-nav="menu">Menu</a>
+        <a data-nav="about">Chi Siamo</a>
+        <a data-nav="gallery">Galleria</a>
+        <a data-nav="contacts">Contatti</a>
+      </div>
+      <div class="footer-col">
+        <h4>Orari</h4>
+        <p>Pranzo: 12:00 — 15:00</p>
+        <p>Cena: 19:00 — 23:30</p>
+        <p>Aperti tutti i giorni</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contatti</h4>
+        <p>Via Roma, 47 — Milano</p>
+        <p>Tel. +39 02 12345678</p>
+        <p>info@fornoefarina.it</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Forno & Farina. Tutti i diritti riservati.</div>
+      <div>P.iva 01234567890</div>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script>
+  const pages = ['home', 'menu', 'about', 'gallery', 'contacts'];
+  let currentPage = 'home';
+
+  function navigateTo(pageId) {
+    currentPage = pageId;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    pages.forEach(p => {
+      const pageEl = document.getElementById('page-' + p);
+      if (pageEl) pageEl.classList.toggle('active', p === pageId);
+    });
+
+    document.querySelectorAll('.nav-link, .drawer-link').forEach(link => {
+      const navTo = link.getAttribute('data-nav');
+      link.classList.toggle('active', navTo === pageId);
+    });
+
+    closeDrawer();
+    localStorage.setItem('ff-page', pageId);
+  }
+
+  document.querySelectorAll('[data-nav]').forEach(el => {
+    el.addEventListener('click', () => navigateTo(el.getAttribute('data-nav')));
+  });
+
+  const menuToggle = document.getElementById('menuToggle');
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    menuToggle.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+    menuToggle.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  menuToggle.addEventListener('click', () => {
+    if (drawer.classList.contains('open')) closeDrawer();
+    else openDrawer();
+  });
+  drawerOverlay.addEventListener('click', closeDrawer);
+
+  const menuTabs = document.querySelectorAll('.menu-tab');
+  const menuCategories = document.querySelectorAll('.menu-category');
+
+  menuTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-tab');
+      menuTabs.forEach(t => t.classList.toggle('active', t === tab));
+      menuCategories.forEach(cat => cat.classList.toggle('active', cat.id === 'tab-' + target));
+    });
+  });
+
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) backToTop.classList.add('visible');
+    else backToTop.classList.remove('visible');
+  });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  const bookingForm = document.getElementById('bookingForm');
+  bookingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = bookingForm.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = '✓ Prenotazione inviata! Ti richiamiamo noi.';
+    btn.style.background = 'oklch(58% 0.16 145)';
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '';
+      bookingForm.reset();
+    }, 4000);
+  });
+
+  const savedPage = localStorage.getItem('ff-page');
+  if (savedPage && pages.includes(savedPage)) navigateTo(savedPage);
+</script>
+
+</body>
+</html>

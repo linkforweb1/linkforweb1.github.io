@@ -1,860 +1,859 @@
-<!DOCTYPE html>
-<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 8)|!(IE)]><!-->
-<html class="no-js" lang="en">
-<!--<![endif]-->
-
+<!doctype html>
+<html lang="it">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Giuseppe Verdi — Sviluppo eCommerce, SEO e Assistenza Tecnica. Freelance per il tuo business online.">
+<title>Giuseppe Verdi · Freelance eCommerce &amp; SEO</title>
+<style>
+:root {
+  --bg:      oklch(99% 0.002 240);
+  --surface: oklch(100% 0 0);
+  --fg:      oklch(18% 0.012 250);
+  --muted:   oklch(54% 0.012 250);
+  --border:  oklch(92% 0.005 250);
+  --accent:  oklch(58% 0.18 255);
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--accent); color: white; }
 
-    <!--- Basic Page Needs
-   ================================================== -->
-    <meta charset="utf-8">
-    <title>Codcurriculum</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+/* ── Layout ── */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+section { padding: 80px 0; }
+section:last-of-type { padding-bottom: 64px; }
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 48px;
+}
 
-    <!-- Mobile Specific Metas
-   ================================================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  background: color-mix(in oklch, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+nav .logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+nav .links { display: flex; gap: 32px; list-style: none; }
+nav .links a {
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.2s var(--ease);
+}
+nav .links a:hover { color: var(--fg); text-decoration: none; }
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--fg);
+}
+.hamburger svg { display: block; }
 
-    <!-- CSS
-    ================================================== -->
-    <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/media-queries.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
+/* ── Mobile drawer ── */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: color-mix(in oklch, var(--fg) 70%, transparent);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.drawer-overlay.open { opacity: 1; }
+.drawer {
+  position: fixed;
+  top: 0; right: 0;
+  width: 80%;
+  max-width: 360px;
+  height: 100vh;
+  z-index: 210;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 80px 32px 32px;
+  transform: translateX(100%);
+  transition: transform 0.35s var(--ease);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.drawer.open { transform: translateX(0); }
+.drawer a {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.drawer a:hover { text-decoration: none; color: var(--accent); }
+.drawer-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg);
+  padding: 4px;
+}
 
-    <!-- Script
-   ================================================== -->
-    <script src="js/modernizr.js"></script>
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 80px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.hero .sub {
+  font-size: clamp(18px, 2vw, 22px);
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 480px;
+}
+.hero .meta {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 36px;
+}
+.hero .meta span { display: inline-block; margin-right: 24px; }
+.hero .meta span:last-child { margin-right: 0; }
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s var(--ease);
+  text-decoration: none;
+}
+.cta:hover { opacity: 0.85; text-decoration: none; }
+.hero-photo {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), color-mix(in oklch, var(--accent) 60%, var(--fg)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(64px, 8vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: white;
+  position: relative;
+}
+.hero-photo::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  z-index: -1;
+}
 
-    <!-- Favicons
-	================================================== -->
-    <link rel="shortcut icon" href="favicon.png">
+/* ── Servizi ── */
+.servizi { background: var(--surface); }
+.servizi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.service-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 28px;
+  transition: border-color 0.2s var(--ease);
+}
+.service-card:hover { border-color: var(--accent); }
+.service-card .icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  display: block;
+}
+.service-card h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+.service-card p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+.service-card .tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
 
+/* ── Skill ── */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 48px;
+}
+.skill-item { }
+.skill-item .name {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.skill-item .name span:last-child {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.skill-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.skill-bar .fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.8s var(--ease);
+}
+
+/* ── Progetti ── */
+.progetti { background: var(--surface); }
+.progetti-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.progetto-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s var(--ease);
+}
+.progetto-card:hover { border-color: var(--accent); }
+.progetto-card .thumb {
+  aspect-ratio: 16/10;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.progetto-card .info { padding: 20px; }
+.progetto-card .info .cat {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.progetto-card .info h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.progetto-card .info p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── Esperienze ── */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  padding-bottom: 48px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+}
+.timeline-item .year {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.timeline-item h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+.timeline-item .role {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.timeline-item p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+/* ── Testimonianze ── */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+.testimonial-card blockquote {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg);
+  margin-bottom: 20px;
+  quotes: '\201C' '\201D' '\2018' '\2019';
+}
+.testimonial-card blockquote::before {
+  content: '\201C';
+  display: block;
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.testimonial-card .author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-card .author .avatar-small {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.testimonial-card .author .name { font-size: 13px; font-weight: 600; }
+.testimonial-card .author .role { font-size: 12px; color: var(--muted); }
+
+/* ── Contatti ── */
+.contatti { background: var(--surface); }
+.contatti-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+.contatti-info h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.contatti-info p {
+  color: var(--muted);
+  margin-bottom: 24px;
+  max-width: 400px;
+}
+.contatti-info .detail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+.contatti-info .detail .ico {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--accent);
+}
+.form-group { margin-bottom: 20px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--fg);
+  background: var(--bg);
+  outline: none;
+  transition: border-color 0.2s var(--ease);
+}
+.form-group input:focus,
+.form-group textarea:focus { border-color: var(--accent); }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--border); }
+
+/* ── Footer ── */
+footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+footer .social { display: flex; gap: 16px; }
+footer .social a { color: var(--muted); font-size: 13px; }
+footer .social a:hover { color: var(--accent); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+  .hero .sub { margin: 0 auto 24px; }
+  .hero .meta { text-align: center; }
+  .hero-photo { max-width: 260px; }
+  .hero-photo::after { display: none; }
+  .servizi-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+  .progetti-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+  .testimonial-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+  .contatti-grid { grid-template-columns: 1fr; gap: 40px; }
+  .skill-grid { grid-template-columns: 1fr; }
+  section { padding: 48px 0; }
+  h2 { text-align: center; }
+  .label { text-align: center; }
+}
+@media (max-width: 640px) {
+  nav .links { display: none; }
+  .hamburger { display: block; }
+  .hero { min-height: auto; padding: 120px 0 60px; }
+  .timeline { padding-left: 24px; }
+  .timeline-item::before { left: -20px; width: 8px; height: 8px; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+  section { padding: 32px 0; }
+  .wrap { padding: 0 20px; }
+}
+</style>
 </head>
-
 <body>
 
-    <!-- Header
-   ================================================== -->
-    <header id="home">
+<!-- ─── Nav ─── -->
+<nav>
+  <span class="logo">GV</span>
+  <ul class="links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#servizi">Servizi</a></li>
+    <li><a href="#skill">Skill</a></li>
+    <li><a href="#progetti">Progetti</a></li>
+    <li><a href="#esperienze">Esperienze</a></li>
+    <li><a href="#testimonianze">Testimonianze</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+</nav>
 
-        <nav id="nav-wrap">
+<!-- ─── Drawer overlay ─── -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <button class="drawer-close" id="drawerClose" aria-label="Chiudi">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </svg>
+  </button>
+  <a href="#hero" class="drawer-link">Home</a>
+  <a href="#servizi" class="drawer-link">Servizi</a>
+  <a href="#skill" class="drawer-link">Skill</a>
+  <a href="#progetti" class="drawer-link">Progetti</a>
+  <a href="#esperienze" class="drawer-link">Esperienze</a>
+  <a href="#testimonianze" class="drawer-link">Testimonianze</a>
+  <a href="#contatti" class="drawer-link">Contatti</a>
+</div>
 
-            <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show navigation</a>
-            <a class="mobile-btn" href="#" title="Hide navigation">Hide navigation</a>
+<!-- ─── Hero ─── -->
+<section class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="label">Freelance · Sviluppo &amp; Consulenza</div>
+      <h1>Giuseppe Verdi</h1>
+      <p class="sub">Realizzo eCommerce ad alte prestazioni, ottimizzo la tua presenza online e garantisco assistenza tecnica continua. Il tuo business, su misura.</p>
+      <div class="meta">
+        <span>📍 Milano / Remoto</span>
+        <span>🕐 8+ anni di esperienza</span>
+        <span>✓ 40+ progetti completati</span>
+      </div>
+      <a href="#contatti" class="cta">Prenota una consulenza →</a>
+    </div>
+    <div class="hero-photo" aria-label="Giuseppe Verdi">GV</div>
+  </div>
+</section>
 
-            <ul id="nav" class="nav">
-                <li class="current"><a class="smoothscroll" href="#home">Home</a></li>
-                <li><a class="smoothscroll" href="#about">Chi sono</a></li>
-                <li><a class="smoothscroll" href="#resume">Curriculum</a></li>
-                <li><a class="smoothscroll" href="#portfolio">Lavori</a></li>
-                <li><a class="smoothscroll" href="#testimonials">Feedback</a></li>
-                <li><a class="smoothscroll" href="#contact">Contattami</a></li>
-            </ul>
-            <!-- end #nav -->
+<!-- ─── Servizi ─── -->
+<section class="servizi" id="servizi">
+  <div class="wrap">
+    <div class="label">Cosa posso fare per te</div>
+    <h2>Servizi</h2>
+    <div class="servizi-grid">
+      <div class="service-card">
+        <span class="icon">🛒</span>
+        <h3>Sviluppo eCommerce</h3>
+        <p>Piattaforme Shopify, WooCommerce e headless custom. Carrello, checkout, gestione inventory, integrazione payment gateway. Performance mobile-first.</p>
+        <span class="tag">Shopify · WooCommerce · Liquid</span>
+      </div>
+      <div class="service-card">
+        <span class="icon">📈</span>
+        <h3>Ottimizzazione SEO</h3>
+        <p>SEO tecnico, audit strutturale, content strategy, backlinking. Ricerca keyword, Core Web Vitals, markup schema.org per propulsionare il tuo posizionamento.</p>
+        <span class="tag">SEO tecnico · Content · Audit</span>
+      </div>
+      <div class="service-card">
+        <span class="icon">⚙️</span>
+        <h3>Assistenza Tecnica</h3>
+        <p>Manutenzione evolutiva, security hardening, migrazioni piattaforma, monitoraggio performance, backup e disaster recovery. Contratto mensile o intervento singolo.</p>
+        <span class="tag">Manutenzione · Security · Migrazioni</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        </nav>
-        <!-- end #nav-wrap -->
+<!-- ─── Skill ─── -->
+<section id="skill">
+  <div class="wrap">
+    <div class="label">Competenze tecniche</div>
+    <h2>Skill</h2>
+    <div class="skill-grid">
+      <div class="skill-item">
+        <div class="name"><span>HTML &amp; CSS / Tailwind</span><span>95%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:95%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>JavaScript (ES6+)</span><span>88%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:88%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>Shopify / Liquid</span><span>92%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:92%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>WordPress / WooCommerce</span><span>90%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>SEO (tecnico &amp; content)</span><span>85%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>React / Next.js</span><span>78%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:78%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>Node.js / API REST</span><span>80%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:80%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="name"><span>Database &amp; SQL</span><span>75%</span></div>
+        <div class="skill-bar"><div class="fill" style="width:75%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="row banner">
-            <div class="banner-text">
-                <h1 class="responsive-headline">Mario Rossi</h1>
-                <h3>Sono un <span>graphic designer</span>, <span>illustratore</span> e <span>webdesigner</span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pharetra nunc sed rutrum elementum. Inizia <a class="smoothscroll" href="#about">scorrendo in basso</a>                    e scopri di più <a class="smoothscroll" href="#about">su di me</a>.</h3>
-                <hr />
-                <ul class="social">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                    <li><a href="#"><i class="fa fa-skype"></i></a></li>
-                </ul>
-            </div>
+<!-- ─── Progetti ─── -->
+<section class="progetti" id="progetti">
+  <div class="wrap">
+    <div class="label">Lavori recenti</div>
+    <h2>Progetti</h2>
+    <div class="progetti-grid">
+      <div class="progetto-card">
+        <div class="thumb">Screenshot eCommerce</div>
+        <div class="info">
+          <div class="cat">Shopify</div>
+          <h3>Maison Moda</h3>
+          <p>eCommerce headless su Shopify + Next.js. Catalogo 800+ prodotti, filtri in real-time, checkout ottimizzato. +45% conversione mobile.</p>
         </div>
-
-        <p class="scrolldown">
-            <a class="smoothscroll" href="#about"><i class="icon-down-circle"></i></a>
-        </p>
-
-    </header>
-    <!-- Header End -->
-
-
-    <!-- About Section
-   ================================================== -->
-    <section id="about">
-
-        <div class="row">
-
-            <div class="three columns">
-
-                <img class="profile-pic" src="images/profilepic.jpg" alt="" />
-
-            </div>
-
-            <div class="nine columns main-col">
-
-                <h2>Chi Sono</h2>
-
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
-                    quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
-                    non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.
-                </p>
-
-                <div class="row">
-
-                    <div class="columns contact-details">
-
-                        <h2>Contatti</h2>
-                        <p class="address">
-                            <span>Mario Rossi</span><br>
-                            <span>Via del Colosseo 135<br>
-						         Roma, Italia
-                     </span><br>
-                            <span>(+39) 456-7890</span><br>
-                            <span>email@dominio.com</span>
-                        </p>
-
-                    </div>
-
-                    <div class="columns download">
-                        <p>
-                            <a href="#" class="button"><i class="fa fa-download"></i>Scarica Curriculum</a>
-                        </p>
-                    </div>
-
-                </div>
-                <!-- end row -->
-
-            </div>
-            <!-- end .main-col -->
-
+      </div>
+      <div class="progetto-card">
+        <div class="thumb">Screenshot SEO</div>
+        <div class="info">
+          <div class="cat">SEO</div>
+          <h3>Toolify SaaS</h3>
+          <p>Audit SEO completo e rewriting tecnico. Da 0 a 18k visite organiche/mese in 6 mesi. Core Web Vitals tutti verdi.</p>
         </div>
-
-    </section>
-    <!-- About Section End-->
-
-
-    <!-- Resume Section
-   ================================================== -->
-    <section id="resume">
-
-        <!-- Education
-      ----------------------------------------------- -->
-        <div class="row education">
-
-            <div class="three columns header-col">
-                <h1><span>Educazione</span></h1>
-            </div>
-
-            <div class="nine columns main-col">
-
-                <div class="row item">
-
-                    <div class="twelve columns">
-
-                        <h3>Università di Roma</h3>
-                        <p class="info">Master in Graphic Design <span>&bull;</span> <em class="date">Aprile 2016</em></p>
-
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis,
-                            sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Nullam dictum felis eu pede mollis pretium.
-                        </p>
-
-                    </div>
-
-                </div>
-                <!-- item end -->
-
-                <div class="row item">
-
-                    <div class="twelve columns">
-
-                        <h3>Scuola di Roma</h3>
-                        <p class="info">Corso di studi in Graphic Design <span>&bull;</span> <em class="date">Marzo 2014</em></p>
-
-                        <p>
-                            This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet
-                            mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat
-                        </p>
-
-                    </div>
-
-                </div>
-                <!-- item end -->
-
-            </div>
-            <!-- main-col end -->
-
+      </div>
+      <div class="progetto-card">
+        <div class="thumb">Screenshot Sito</div>
+        <div class="info">
+          <div class="cat">WordPress</div>
+          <h3>Studio Legale Bianchi</h3>
+          <p>Sito corporate con prenotazione appuntamenti, blog e SEO locale. Migrazione da vecchio sito statico a WordPress headless.</p>
         </div>
-        <!-- End Education -->
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ─── Esperienze ─── -->
+<section id="esperienze">
+  <div class="wrap">
+    <div class="label">Percorso professionale</div>
+    <h2>Esperienze</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">2023 — presente</div>
+        <h3>Freelance · Sviluppatore eCommerce &amp; SEO</h3>
+        <div class="role">Full-time · Remoto</div>
+        <p>Consulenza per PMI e startup su piattaforme eCommerce, SEO tecnico e assistenza continuativa. Oltre 20 progetti consegnati con contratto di manutenzione attivo.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2021 — 2023</div>
+        <h3>Lead Developer · DigitalBase Srl</h3>
+        <div class="role">Milano · Full-time</div>
+        <p>Team lead reparto eCommerce. Sviluppo e manutenzione di 15 store Shopify/WooCommerce. Introduzione di processi CI/CD e audit SEO trimestrali.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2019 — 2021</div>
+        <h3>Sviluppatore Full-Stack · WebAgency Lab</h3>
+        <div class="role">Milano · Full-time</div>
+        <p>Sviluppo siti web e piccoli eCommerce su WordPress/WooCommerce. Gestione server LAMP, migrazioni e SEO on-page per clienti B2B e B2C.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2017 — 2019</div>
+        <h3>Junior Developer · Start Srl</h3>
+        <div class="role">Bergamo · Full-time</div>
+        <p>Prime esperienze su sviluppo front-end (HTML, CSS, JS) e manutenzione siti web. Supporto al team SEO per audit tecnici e implementazione correttivi.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Work
-      ----------------------------------------------- -->
-        <div class="row work">
-
-            <div class="three columns header-col">
-                <h1><span>Lavori</span></h1>
-            </div>
-
-            <div class="nine columns main-col">
-
-                <div class="row item">
-
-                    <div class="twelve columns">
-
-                        <h3>Progetto Design Studio</h3>
-                        <p class="info">Senior UX Designer <span>&bull;</span> <em class="date">Marzo 2017 - Presente</em></p>
-
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis,
-                            sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. Nullam dictum felis eu pede mollis pretium.
-                        </p>
-
-                    </div>
-
-                </div>
-                <!-- item end -->
-
-                <div class="row item">
-
-                    <div class="twelve columns">
-
-                        <h3>Progetto Web Studio</h3>
-                        <p class="info">UX Designer <span>&bull;</span> <em class="date">Maggio 2016 - Febbraio 2017</em></p>
-
-                        <p>
-                            This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet
-                            mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat
-                        </p>
-
-                    </div>
-
-                </div>
-                <!-- item end -->
-
-            </div>
-            <!-- main-col end -->
-
+<!-- ─── Testimonianze ─── -->
+<section class="servizi" id="testimonianze">
+  <div class="wrap">
+    <div class="label">Cosa dicono di me</div>
+    <h2>Testimonianze</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <blockquote>Giuseppe ha rivoluzionato il nostro eCommerce. Il carrello abbandonato è calato del 30%, le performance mobile sono finalmente accettabili. Professionale, puntuale, competente.</blockquote>
+        <div class="author">
+          <div class="avatar-small">MR</div>
+          <div><div class="name">Matteo Rossi</div><div class="role">Fondatore · Maison Moda</div></div>
         </div>
-        <!-- End Work -->
-
-
-        <!-- Skills
-      ----------------------------------------------- -->
-        <div class="row skill">
-
-            <div class="three columns header-col">
-                <h1><span>Skills</span></h1>
-            </div>
-
-            <div class="nine columns main-col">
-
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
-                    quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                </p>
-
-                <div class="bars">
-
-                    <ul class="skills">
-                        <li><span class="bar-expand photoshop"></span><em>Photoshop</em></li>
-                        <li><span class="bar-expand illustrator"></span><em>Illustrator</em></li>
-                        <li><span class="bar-expand wordpress"></span><em>Wordpress</em></li>
-                        <li><span class="bar-expand css"></span><em>CSS</em></li>
-                        <li><span class="bar-expand html5"></span><em>HTML5</em></li>
-                        <li><span class="bar-expand jquery"></span><em>jQuery</em></li>
-                    </ul>
-
-                </div>
-                <!-- end skill-bars -->
-
-            </div>
-            <!-- main-col end -->
-
+      </div>
+      <div class="testimonial-card">
+        <blockquote>Lavoriamo insieme da due anni per la manutenzione della nostra piattaforma. Giuseppe è reattivo, sa spiegare anche i problemi complessi in modo chiaro e non lascia mai nulla in sospeso.</blockquote>
+        <div class="author">
+          <div class="avatar-small">LB</div>
+          <div><div class="name">Laura Bianchi</div><div class="role">CEO · Toolify</div></div>
         </div>
-        <!-- End skills -->
-
-    </section>
-    <!-- Resume Section End-->
-
-
-    <!-- Portfolio Section
-   ================================================== -->
-    <section id="portfolio">
-
-        <div class="row">
-
-            <div class="twelve columns collapsed">
-
-                <h1>Alcuni dei miei Lavori</h1>
-
-                <!-- portfolio-wrapper -->
-                <div id="portfolio-wrapper" class="bgrid-quarters s-bgrid-thirds cf">
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-01" title="">
-                                <img alt="" src="images/portfolio/coffee.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-02" title="">
-                                <img alt="" src="images/portfolio/console.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-03" title="">
-                                <img alt="" src="images/portfolio/judah.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-04" title="">
-                                <img alt="" src="images/portfolio/into-the-light.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-05" title="">
-                                <img alt="" src="images/portfolio/farmerboy.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-06" title="">
-                                <img alt="" src="images/portfolio/girl.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-07" title="">
-                                <img alt="" src="images/portfolio/origami.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                    <div class="columns portfolio-item">
-                        <div class="item-wrap">
-
-                            <a href="#modal-08" title="">
-                                <img alt="" src="images/portfolio/retrocam.jpg">
-                                <div class="overlay">
-                                    <div class="portfolio-item-meta">
-                                        <h5>Lorem ipsum</h5>
-                                        <p>Categoria</p>
-                                    </div>
-                                </div>
-                                <div class="link-icon"><i class="icon-plus"></i></div>
-                            </a>
-
-                        </div>
-                    </div>
-                    <!-- item end -->
-
-                </div>
-                <!-- portfolio-wrapper end -->
-
-            </div>
-            <!-- twelve columns end -->
-
-
-            <!-- Modal Popup
-	      --------------------------------------------------------------- -->
-
-            <div id="modal-01" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-coffee.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-01 End -->
-
-            <div id="modal-02" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-console.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-02 End -->
-
-            <div id="modal-03" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-judah.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-03 End -->
-
-            <div id="modal-04" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-intothelight.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-04 End -->
-
-            <div id="modal-05" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-farmerboy.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-05 End -->
-
-            <div id="modal-06" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-girl.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-06 End -->
-
-            <div id="modal-07" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-origami.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-07 End -->
-
-            <div id="modal-08" class="popup-modal mfp-hide">
-
-                <img class="scale-with-grid" src="images/portfolio/modals/m-retrocam.jpg" alt="" />
-
-                <div class="description-box">
-                    <h4>Lorem ipsum</h4>
-                    <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
-                    <span class="categories"><i class="fa fa-tag"></i>Tag, Tag</span>
-                </div>
-
-                <div class="link-box">
-                    <a href="#">Dettagli</a>
-                    <a class="popup-modal-dismiss">Chiudi</a>
-                </div>
-
-            </div>
-            <!-- modal-01 End -->
-
-
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Contatti ─── -->
+<section class="contatti" id="contatti">
+  <div class="wrap">
+    <div class="label">Lavoriamo insieme</div>
+    <h2>Contatti</h2>
+    <div class="contatti-grid">
+      <div class="contatti-info">
+        <h3>Parlami del tuo progetto</h3>
+        <p>Compila il form o scrivimi direttamente. Rispondo entro 24 ore.</p>
+        <div class="detail">
+          <span class="ico">@</span>
+          <span>giuseppe@verdi.dev</span>
         </div>
-        <!-- row End -->
-
-    </section>
-    <!-- Portfolio Section End-->
-
-
-    <!-- Call-To-Action Section
-   ================================================== -->
-    <section id="call-to-action">
-
-        <div class="row">
-
-            <div class="two columns header-col">
-
-                <h1><span>Lorem ipsum.</span></h1>
-
-            </div>
-
-            <div class="seven columns">
-
-                <h2><a href="#">Lorem ipsum dolor sit amet.</a></h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <a href="#"><span>Lorem</span></a>. Sed <span>alicuam</span> ipsum dolor sit amet consectetur adipisicing. <span>LOREM IPSUM</span>.
-                    <!-- Simply type	the promocode in the box labeled “Promo Code” when placing your order. -->
-                </p>
-
-            </div>
-
-            <div class="three columns action">
-
-                <a href="#" class="button">Button</a>
-
-            </div>
-
+        <div class="detail">
+          <span class="ico">☎</span>
+          <span>+39 345 678 9012</span>
         </div>
-
-    </section>
-    <!-- Call-To-Action Section End-->
-
-
-    <!-- Testimonials Section
-   ================================================== -->
-    <section id="testimonials">
-
-        <div class="text-container">
-
-            <div class="row">
-
-                <div class="two columns header-col">
-
-                    <h1><span>Feedback Clienti</span></h1>
-
-                </div>
-
-                <div class="ten columns flex-container">
-
-                    <div class="flexslider">
-
-                        <ul class="slides">
-
-                            <li>
-                                <blockquote>
-                                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia totam minus voluptatum quasi molestiae dolorum illum reprehenderit iusto accusantium quam atque exercitationem quo repellat sequi, mollitia quibusdam excepturi,
-                                        beatae possimus. Non ratione, obcaecati quam repellendus ad accusantium ab nulla atque.
-                                    </p>
-                                    <cite>Mr. Black</cite>
-                                </blockquote>
-                            </li>
-                            <!-- slide ends -->
-
-                            <li>
-                                <blockquote>
-                                    <p>This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
-                                        nibh vulputate cursus a sit amet mauris.
-                                    </p>
-                                    <cite>Mr. White</cite>
-                                </blockquote>
-                            </li>
-                            <!-- slide ends -->
-
-                        </ul>
-
-                    </div>
-                    <!-- div.flexslider ends -->
-
-                </div>
-                <!-- div.flex-container ends -->
-
-            </div>
-            <!-- row ends -->
-
+        <div class="detail">
+          <span class="ico">📍</span>
+          <span>Milano / Remoto Italia</span>
         </div>
-        <!-- text-container ends -->
-
-    </section>
-    <!-- Testimonials Section End-->
-
-
-    <!-- Contact Section
-   ================================================== -->
-    <section id="contact">
-
-        <div class="row section-head">
-
-            <div class="two columns header-col">
-
-                <h1><span>Contattami</span></h1>
-
-            </div>
-
-            <div class="ten columns">
-
-                <p class="lead">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
-                    quia voluptas sit aspernatur aut odit aut fugit.
-                </p>
-
-            </div>
-
+        <div style="margin-top:28px;font-size:13px;color:var(--muted)">
+          Prima consulenza gratuita · Nessun impegno
         </div>
-
-        <div class="row">
-
-            <div class="eight columns">
-
-                <!-- form -->
-                <form action="" method="post" id="contactForm" name="contactForm">
-                    <fieldset>
-
-                        <div>
-                            <label for="contactName">Nome <span class="required">*</span></label>
-                            <input type="text" value="" size="35" id="contactName" name="contactName">
-                        </div>
-
-                        <div>
-                            <label for="contactEmail">Email <span class="required">*</span></label>
-                            <input type="text" value="" size="35" id="contactEmail" name="contactEmail">
-                        </div>
-
-                        <div>
-                            <label for="contactSubject">Oggetto</label>
-                            <input type="text" value="" size="35" id="contactSubject" name="contactSubject">
-                        </div>
-
-                        <div>
-                            <label for="contactMessage">Messaggio <span class="required">*</span></label>
-                            <textarea cols="50" rows="15" id="contactMessage" name="contactMessage"></textarea>
-                        </div>
-
-                        <div>
-                            <button class="submit">Invia</button>
-                            <span id="image-loader">
-                        <img alt="" src="images/loader.gif">
-                     </span>
-                        </div>
-
-                    </fieldset>
-                </form>
-                <!-- Form End -->
-
-                <!-- contact-warning -->
-                <div id="message-warning"> Error compilazione</div>
-                <!-- contact-success -->
-                <div id="message-success">
-                    <i class="fa fa-check"></i>Il tuo messaggio è stato inviato, grazie!<br>
-                </div>
-
-            </div>
-
-
-            <aside class="four columns footer-widgets">
-
-                <div class="widget widget_contact">
-
-                    <h4>Indirizzo e Telefono</h4>
-                    <p class="address">
-                        Mario Rossi<br> via del Colosseo, 135 <br> Roma, Italia<br>
-                        <span>(+39) 456-7890</span>
-                    </p>
-
-                </div>
-
-                <div class="widget widget_tweets">
-
-                    <h4 class="widget-title">Tweets Recenti</h4>
-
-                    <ul id="twitter">
-                        <li>
-                            <span>
-                        This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
-                        Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum
-                        <a href="#">http://t.co/CGIrdxIlI3</a>
-                        </span>
-                            <b><a href="#">2 Giorni fà</a></b>
-                        </li>
-                        <li>
-                            <span>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-                        eaque ipsa quae ab illo inventore veritatis et quasi
-                        <a href="#">http://t.co/CGIrdxIlI3</a>
-                        </span>
-                            <b><a href="#">3 Giorni fà</a></b>
-                        </li>
-                    </ul>
-
-                </div>
-
-            </aside>
-
+      </div>
+      <form onsubmit="event.preventDefault();alert('Grazie per il messaggio! Ti risponderò entro 24 ore.')">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" placeholder="Il tuo nome" required>
         </div>
-
-    </section>
-    <!-- Contact Section End-->
-
-
-    <!-- footer
-   ================================================== -->
-    <footer>
-
-        <div class="row">
-
-            <div class="twelve columns">
-
-                <ul class="social-links">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                    <li><a href="#"><i class="fa fa-skype"></i></a></li>
-                </ul>
-
-                <ul class="copyright">
-                    <li>&copy; Copyright 2018 </li>
-                    <li>Design by <a title="Styleshout" href="http://www.linkforweb.com/" target="_blank"> &nbsp; Linkforweb - Web & Graphic Studio</a></li>
-                </ul>
-
-            </div>
-
-            <div id="go-top"><a class="smoothscroll" title="Back to Top" href="#home"><i class="icon-up-open"></i></a></div>
-
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="la tua@email.com" required>
         </div>
+        <div class="form-group">
+          <label for="servizio">Tipo di progetto</label>
+          <input type="text" id="servizio" placeholder="eCommerce / SEO / Assistenza / Altro">
+        </div>
+        <div class="form-group">
+          <label for="messaggio">Messaggio</label>
+          <textarea id="messaggio" placeholder="Raccontami del tuo progetto..." style="min-height:100px"></textarea>
+        </div>
+        <button type="submit" class="cta">Invia messaggio →</button>
+      </form>
+    </div>
+  </div>
+</section>
 
-    </footer>
-    <!-- Footer End-->
+<!-- ─── Footer ─── -->
+<div class="wrap">
+  <footer>
+    <span>&copy; 2026 Giuseppe Verdi · P.IVA 01234567890</span>
+    <div class="social">
+      <a href="#">LinkedIn</a>
+      <a href="#">GitHub</a>
+      <a href="#">Twitter</a>
+    </div>
+  </footer>
+</div>
 
-    <!-- Java Script
-   ================================================== -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script>
-        window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')
-    </script>
-    <script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+<script>
+(function(){
+  var overlay = document.getElementById('drawerOverlay');
+  var drawer = document.getElementById('drawer');
+  var hamburger = document.getElementById('hamburger');
+  var closeBtn = document.getElementById('drawerClose');
+  var drawerLinks = document.querySelectorAll('.drawer-link');
 
-    <script src="js/jquery.flexslider.js"></script>
-    <script src="js/waypoints.js"></script>
-    <script src="js/jquery.fittext.js"></script>
-    <script src="js/magnific-popup.js"></script>
-    <script src="js/init.js"></script>
+  function openDrawer() {
+    overlay.style.display = 'block';
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function(){ overlay.style.display = 'none'; }, 350);
+  }
+  hamburger.addEventListener('click', openDrawer);
+  closeBtn.addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  drawerLinks.forEach(function(l){ l.addEventListener('click', closeDrawer); });
 
+  var cta = document.querySelector('.hero .cta');
+  cta.addEventListener('click', function(e){
+    e.preventDefault();
+    var y = document.getElementById('contatti').getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+})();
+</script>
 </body>
-
 </html>
