@@ -1,600 +1,761 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
-
+<html lang="it">
 <head>
-    <title>Food King</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Food King — Ristorante Roma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <!-- meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    :root {
+      --red: #ed0121;
+      --red-d: #c4001b;
+      --dark: #2c2d39;
+      --dark-nav: rgba(33,45,57,.92);
+      --light: #fbfbfb;
+      --white: #ffffff;
+      --text: #333;
+      --text-light: #666;
+      --nav-h: 68px;
+      --max-w: 1140px;
+      --font-h: 'Playfair Display', Georgia, serif;
+      --font-b: 'Nunito', system-ui, sans-serif;
+    }
 
-    <!-- css -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+    body { font-family: var(--font-b); color: var(--text); background: var(--white); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4 { font-family: var(--font-h); }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
 
-    <!-- google font -->
-    <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Kreon:300,400,700'>
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: var(--nav-h); background: rgba(33,45,57,.7);
+      backdrop-filter: blur(8px);
+      transition: background .3s;
+    }
+    nav.scrolled { background: var(--dark-nav); }
+    .nav-inner {
+      max-width: var(--max-w); margin: 0 auto; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; padding: 0 24px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      color: rgba(255,255,255,.85); font-weight: 600; font-size: .82rem;
+      text-transform: uppercase; letter-spacing: .8px; padding: 6px 14px;
+      border-radius: 3px; transition: background .2s, color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { background: var(--red); color: #fff; }
+    .nav-left { margin-right: 60px; }
+    .nav-right { margin-left: 60px; }
+    .nav-logo {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      top: 0; width: 100px; background: #000;
+      border-radius: 0 0 50% 50%;
+      padding: 10px 14px 16px; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo img { width: 70px; height: auto; }
 
-    <!-- js -->
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    /* Mobile nav */
+    .nav-mobile {
+      display: none; width: 100%; justify-content: space-between; align-items: center;
+    }
+    .nav-brand { font-family: var(--font-h); font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .hamburger { background: none; border: 1px solid rgba(255,255,255,.3); border-radius: 4px; padding: 7px 9px; cursor: pointer; }
+    .hamburger span { display: block; width: 18px; height: 1.5px; background: #fff; margin: 4px 0; }
+
+    /* Drawer */
+    .drawer {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: var(--dark); flex-direction: column;
+      align-items: center; justify-content: center; gap: 32px;
+    }
+    .drawer.open { display: flex; }
+    .drawer a { font-family: var(--font-h); font-size: 1.8rem; color: #fff; font-weight: 600; }
+    .drawer a:hover { color: var(--red); }
+    .drawer-close { position: absolute; top: 20px; right: 24px; background: none; border: none; color: rgba(255,255,255,.6); font-size: 2rem; cursor: pointer; font-family: var(--font-b); }
+
+    /* ── HERO ── */
+    #header {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: url('img/night.jpg') center center / cover no-repeat fixed;
+      position: relative;
+    }
+    .bg-overlay {
+      position: absolute; inset: 0;
+      background: rgba(20,15,5,.35);
+    }
+    .hero-content { position: relative; z-index: 1; text-align: center; }
+    .hero-title {
+      font-size: clamp(56px, 10vw, 110px); font-weight: 900; color: #fff;
+      text-transform: uppercase; letter-spacing: 2px; line-height: 1;
+      background: var(--red); display: inline-block; padding: 4px 20px;
+    }
+    .hero-subtitle {
+      margin-top: 12px;
+      display: inline-block; background: var(--white);
+    }
+    .hero-subtitle h4 {
+      font-family: var(--font-h); font-size: clamp(18px, 3vw, 32px);
+      color: var(--red); padding: 4px 18px; font-weight: 600;
+      font-style: italic; letter-spacing: 1px;
+    }
+    .hero-arrow {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      z-index: 1; animation: bounce 2s infinite;
+    }
+    .hero-arrow a { color: rgba(255,255,255,.8); display: block; }
+    .hero-arrow svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 2; }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    /* ── ZIG-ZAG SEPARATORS ── */
+    .zig-top-light {
+      height: 30px;
+      background-image:
+        linear-gradient(315deg, var(--light) 50%, transparent 50%),
+        linear-gradient(45deg, var(--light) 50%, transparent 50%);
+      background-size: 25px 30px;
+    }
+    .zig-bottom-light {
+      height: 30px;
+      background-image:
+        linear-gradient(225deg, var(--light) 50%, transparent 50%),
+        linear-gradient(135deg, var(--light) 50%, transparent 50%);
+      background-size: 25px 30px;
+    }
+    .zig-top-red {
+      height: 30px;
+      background-image:
+        linear-gradient(315deg, var(--red) 50%, transparent 50%),
+        linear-gradient(45deg, var(--red) 50%, transparent 50%);
+      background-size: 25px 30px;
+    }
+
+    /* ── SHARED SECTION STYLES ── */
+    .section-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-title {
+      font-size: clamp(28px, 4vw, 38px); font-weight: 700; text-transform: uppercase;
+      color: var(--dark); letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .section-title::after {
+      content: ''; display: block; width: 48px; height: 3px;
+      background: var(--red); margin: 12px auto 0; border-radius: 2px;
+    }
+    .section-lead {
+      font-size: 1rem; color: var(--text-light); text-transform: uppercase;
+      letter-spacing: .5px; margin-top: 24px;
+    }
+
+    /* ── STORIA ── */
+    #story { background: var(--light); padding: 100px 0; }
+    .story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; text-align: center; }
+    .story-col {}
+    .story-icon {
+      width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--red), #ff5a1f);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .story-icon svg { width: 36px; height: 36px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .story-col h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; color: var(--dark); }
+    .story-col p { font-size: .93rem; color: var(--text-light); line-height: 1.8; }
+
+    /* ── FACTS ── */
+    #facts {
+      background: url('img/parallax2.jpg') center center / cover no-repeat fixed;
+      padding: 120px 0; position: relative;
+    }
+    #facts::before { content: ''; position: absolute; inset: 0; background: rgba(20,15,5,.55); }
+    .facts-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+    .fact-item {}
+    .fact-icon {
+      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fact-icon svg { width: 32px; height: 32px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .fact-item h4 { font-size: 2.4rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .fact-item p { font-size: .85rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,.75); margin: 0; }
+
+    /* ── MENU PIATTI ── */
+    #food-menu { background: var(--light); padding: 100px 0; }
+    .menu-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-bottom: 40px; }
+    .menu-col { text-align: center; }
+    .menu-img-wrap {
+      width: 130px; height: 130px; border-radius: 50%; overflow: hidden;
+      border: 4px solid var(--red); margin: 0 auto 18px;
+    }
+    .menu-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .menu-col h3 {
+      font-family: var(--font-h); font-size: 1.1rem; color: var(--red);
+      font-weight: 700; margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .menu-col ul { padding: 0; }
+    .menu-col li { font-size: .88rem; color: var(--text-light); padding: 5px 0; border-bottom: 1px dotted #e8e8e8; }
+    .menu-col li:last-child { border-bottom: none; }
+
+    /* ── OFFERTE SPECIALI ── */
+    #special-offers {
+      background: url('img/parallax1.jpg') center center / cover no-repeat fixed;
+      padding: 100px 0; position: relative;
+    }
+    #special-offers::before { content: ''; position: absolute; inset: 0; background: rgba(20,15,5,.6); }
+    #special-offers .section-title { color: #fff; }
+    #special-offers .section-title::after { background: #fff; }
+    #special-offers .section-lead { color: rgba(255,255,255,.7); }
+    .offers-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .offer-card {
+      display: flex; gap: 20px; align-items: flex-start;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px; padding: 20px; position: relative;
+      backdrop-filter: blur(4px);
+      transition: background .25s;
+    }
+    .offer-card:hover { background: rgba(255,255,255,.14); }
+    .offer-img { width: 130px; flex-shrink: 0; border-radius: 8px; overflow: hidden; }
+    .offer-img img { width: 130px; height: 130px; object-fit: cover; border-radius: 8px; }
+    .offer-details {}
+    .offer-details h3 { font-size: 1.1rem; color: #fff; margin-bottom: 8px; font-weight: 700; }
+    .offer-details p { font-size: .85rem; color: rgba(255,255,255,.72); line-height: 1.65; margin-bottom: 14px; }
+    .btn-offer {
+      display: inline-block; background: var(--red); color: #fff;
+      padding: 7px 20px; border-radius: 4px; font-size: .82rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .5px;
+      transition: background .2s;
+    }
+    .btn-offer:hover { background: var(--red-d); }
+    .price-tag {
+      position: absolute; top: -10px; left: -10px;
+      width: 52px; height: 52px; border-radius: 50%; border: 3px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .9rem; color: #fff; font-family: var(--font-h);
+    }
+    .price-red { background: var(--red); }
+    .price-blue { background: #32c8de; }
+    .price-green { background: #51d466; }
+
+    /* ── PRENOTA ── */
+    #reservation { background: var(--light); padding: 100px 0; }
+    .reservation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .res-form h4 { font-size: 1rem; color: var(--text); margin-bottom: 24px; font-family: var(--font-b); font-weight: 600; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+    .form-field input {
+      background: transparent; border: 1px solid #ccc; border-radius: 4px;
+      padding: 10px 14px; font-family: var(--font-b); font-size: .9rem; color: var(--text);
+      outline: none; transition: border-color .2s;
+    }
+    .form-field input:focus { border-color: var(--red); }
+    .form-note { font-size: .85rem; color: var(--text-light); margin-bottom: 20px; line-height: 1.7; }
+    .btn-book {
+      background: var(--red); color: #fff; font-family: var(--font-b);
+      font-size: .95rem; font-weight: 700; padding: 12px 32px;
+      border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase;
+      letter-spacing: .5px; transition: background .2s;
+    }
+    .btn-book:hover { background: var(--red-d); }
+    .res-info {}
+    .res-info-block { margin-bottom: 28px; }
+    .res-info-block h3 {
+      font-size: 1.1rem; color: var(--dark); font-weight: 700;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .res-info-block h3 svg { width: 18px; height: 18px; stroke: var(--red); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .res-info-block h4 { font-size: .9rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; font-family: var(--font-b); }
+    .res-info-block p { font-size: .88rem; color: var(--text-light); margin-bottom: 8px; }
+    .res-info-block a { color: var(--red); }
+
+    /* ── CHEF ── */
+    #chefs {
+      background: url('img/parallax1.jpg') center center / cover no-repeat fixed;
+      padding: 120px 0; position: relative;
+    }
+    #chefs::before { content: ''; position: absolute; inset: 0; background: rgba(20,15,5,.6); }
+    #chefs .section-title { color: #fff; }
+    #chefs .section-title::after { background: rgba(255,255,255,.6); }
+    #chefs .section-lead { color: rgba(255,255,255,.65); }
+    .chefs-grid { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+    .chef-card {}
+    .chef-img {
+      width: 180px; height: 180px; border-radius: 50%; overflow: hidden;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .chef-img:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,.5); }
+    .chef-img img { width: 100%; height: 100%; object-fit: cover; }
+    .chef-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 8px; font-weight: 700; }
+    .chef-card p { font-size: .88rem; color: rgba(255,255,255,.72); line-height: 1.75; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--red); padding: 40px 24px; }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-copy { font-size: .9rem; font-weight: 600; color: #fff; }
+    .footer-copy a { color: rgba(255,255,255,.75); transition: color .2s; }
+    .footer-copy a:hover { color: #fff; }
+    .social-bar { display: flex; gap: 14px; align-items: center; }
+    .social-bar a { color: #fff; display: flex; align-items: center; transition: opacity .25s; }
+    .social-bar a:hover { opacity: .65; }
+    .social-bar svg { width: 26px; height: 26px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .menu-row { grid-template-columns: repeat(2, 1fr); }
+      .offers-grid { grid-template-columns: 1fr; }
+      .facts-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    }
+    @media (max-width: 768px) {
+      :root { --nav-h: 60px; }
+      .nav-links, .nav-logo { display: none; }
+      .nav-mobile { display: flex; }
+      #header { background-attachment: scroll; }
+      #facts { background-attachment: scroll; }
+      #special-offers { background-attachment: scroll; }
+      #chefs { background-attachment: scroll; }
+      .hero-title { font-size: 56px; }
+      #story, #food-menu, #reservation { padding: 72px 0; }
+      #facts, #special-offers, #chefs { padding: 80px 0; }
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .facts-grid { grid-template-columns: repeat(2, 1fr); }
+      .menu-row { grid-template-columns: repeat(2, 1fr); }
+      .chefs-grid { grid-template-columns: 1fr; gap: 36px; }
+      .reservation-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .social-bar { margin-top: 8px; }
+    }
+    @media (max-width: 480px) {
+      .facts-grid { grid-template-columns: 1fr 1fr; }
+      .menu-row { grid-template-columns: 1fr 1fr; }
+      .offer-card { flex-direction: column; }
+      .offer-img { width: 100%; }
+      .offer-img img { width: 100%; height: 200px; }
+    }
+  </style>
 </head>
+<body>
 
-<body data-spy="scroll" data-target="#navbar" data-offset="120">
-    <!--[if lt IE 7]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-
-    <div id="menu" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header visible-xs">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <h2>Food King</h2>
-                </a>
-            </div>
-            <!-- navbar-header -->
-            <div id="navbar" class="navbar-collapse collapse">
-                <div class="hidden-xs" id="logo">
-                    <a href="#header" class="scroll_to">
-                        <img src="img/logo.png" alt="Food King">
-                    </a>
-                </div>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#story" class="scroll_to">Storia</a></li>
-                    <li><a href="#reservation" class="scroll_to">Prenota</a></li>
-                    <li><a href="#chefs" class="scroll_to">Chefs</a></li>
-
-
-                    <li><a href="#facts" class="scroll_to">Numeri</a></li>
-                    <li><a href="#food-menu" class="scroll_to">Menu Piatti</a></li>
-                    <li><a href="#special-offser" class="scroll_to">Offerte Speciali</a></li>
-
-                    <!--fix for scroll spy active menu element-->
-                    <li style="display:none;">
-                        <a href="#header"></a>
-                    </li>
-
-                </ul>
-            </div>
-            <!--/.navbar-collapse -->
-        </div>
-        <!-- container -->
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <!-- Desktop links -->
+    <ul class="nav-links nav-left">
+      <li><a href="#story">Storia</a></li>
+      <li><a href="#reservation">Prenota</a></li>
+      <li><a href="#chefs">Chef</a></li>
+    </ul>
+    <a href="#header" class="nav-logo">
+      <img src="img/logo.png" alt="Food King">
+    </a>
+    <ul class="nav-links nav-right">
+      <li><a href="#facts">Numeri</a></li>
+      <li><a href="#food-menu">Menu</a></li>
+      <li><a href="#special-offers">Offerte</a></li>
+    </ul>
+    <!-- Mobile -->
+    <div class="nav-mobile">
+      <span class="nav-brand">Food King</span>
+      <button class="hamburger" id="ham" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <!-- menu -->
+  </div>
+</nav>
 
-    <div id="header">
-        <div class="bg-overlay"></div>
-        <div class="center text-center">
-            <div class="banner">
-                <h1 class="">Food King</h1>
-            </div>
-            <div class="subtitle">
-                <h4>LOREM IPSUM DOLOR</h4>
-            </div>
-        </div>
-        <div class="bottom text-center">
-            <a id="scrollDownArrow" href="#story" class="scroll_to"><i class="fa fa-chevron-down"></i></a>
-        </div>
+<!-- DRAWER MOBILE -->
+<div class="drawer" id="drawer">
+  <button class="drawer-close" id="drawer-close">✕</button>
+  <a href="#story">Storia</a>
+  <a href="#reservation">Prenota</a>
+  <a href="#chefs">Chef</a>
+  <a href="#facts">Numeri</a>
+  <a href="#food-menu">Menu</a>
+  <a href="#special-offers">Offerte</a>
+</div>
+
+<!-- HERO -->
+<div id="header">
+  <div class="bg-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-title">Food King</div>
+    <div class="hero-subtitle">
+      <h4>Cucina di qualità, passione autentica</h4>
     </div>
-    <!-- /#header -->
+  </div>
+  <div class="hero-arrow">
+    <a href="#story">
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </a>
+  </div>
+</div>
 
-    <div id="story" class="light-wrapper">
-        <section class="ss-style-top"></section>
-        <div class="container inner">
-            <h2 class="section-title text-center">La storia</h2>
-            <p class="lead main text-center">Lorem ipsum dolor sit amet consectetur</p>
-            <div class="row text-center story">
-                <div class="col-sm-4">
-                    <div class="col-wrapper">
-                        <div class="icon-wrapper"> <i class="fa fa-glass"></i> </div>
-                        <h3>Lorem ipsum</h3>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore velit dolor unde vero, praesentium ipsa quasi perferendis quibusdam sunt excepturi</p>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="col-wrapper">
-                        <div class="icon-wrapper"> <i class="fa fa-cutlery"></i> </div>
-                        <h3>Lorem ipsum</h3>
-                        <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient monte nascetur ultricies vehicula. </p>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="col-wrapper">
-                        <div class="icon-wrapper"> <i class="fa fa-coffee"></i> </div>
-                        <h3>Lorem ipsum</h3>
-                        <p>Curabitur blandit matti tempus porttitor. Donec id elit non mi porta ut gravida at eget metus. Consectetur adipiscing elit ultricies vehicula.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /.services -->
-        </div>
-        <!-- /.container -->
-        <section class="ss-style-bottom"></section>
+<!-- STORIA -->
+<div class="zig-top-light"></div>
+<div id="story">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">La storia</h2>
+      <p class="section-lead">Tre decenni di sapori, una sola missione: farti star bene a tavola</p>
     </div>
-    <!-- #story -->
-
-
-    <div id="facts" class="parallax parallax2 facts">
-        <div class="container inner">
-            <div class="row text-center services-3">
-                <div class="col-sm-3">
-                    <div class="col-wrapper">
-                        <div class="icon-border bm10"> <i class="fa fa-beer"></i> </div>
-                        <h4>796518</h4>
-                        <p>Lorem, ipsum dolor.</p>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="col-wrapper">
-                        <div class="icon-border bm10"> <i class="fa fa-glass"></i> </div>
-                        <h4>39472</h4>
-                        <p>Lorem, ipsum.</p>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="col-wrapper">
-                        <div class="icon-border bm10"> <i class="fa fa-leaf"></i> </div>
-                        <h4>2188764</h4>
-                        <p>Lorem, ipsum.</p>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="col-wrapper">
-                        <div class="icon-border bm10"> <i class="fa fa-users"></i> </div>
-                        <h4>480523</h4>
-                        <p>Lorem, ipsum dolor.</p>
-                    </div>
-                </div>
-            </div>
+    <div class="story-grid">
+      <div class="story-col">
+        <div class="story-icon">
+          <svg viewBox="0 0 24 24"><path d="M8 22h8M12 18v4M5 2h14l-1.5 6.5A2 2 0 0 1 15.56 10H8.44a2 2 0 0 1-1.94-1.5L5 2z"/><path d="M5 2c2 4 7 8 7 8s5-4 7-8"/></svg>
         </div>
-        <!-- /.container -->
+        <h3>La nostra storia</h3>
+        <p>Nati nel 1994 come piccola trattoria di quartiere, siamo cresciuti fedeli ai valori di sempre: ingredienti freschi, ricette della tradizione e un'accoglienza calorosa che fa sentire ogni ospite come a casa propria.</p>
+      </div>
+      <div class="story-col">
+        <div class="story-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v5h3.5a1.5 1.5 0 0 1 1.5 1.5v1.5"/><path d="M17 22v-7"/></svg>
+        </div>
+        <h3>La filosofia</h3>
+        <p>Coltiviamo relazioni dirette con produttori locali del Lazio e del Sud Italia. Ogni ingrediente è scelto con cura: km zero quando possibile, stagione di punta, zero compromessi sulla qualità della materia prima.</p>
+      </div>
+      <div class="story-col">
+        <div class="story-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+        </div>
+        <h3>L'esperienza</h3>
+        <p>Da noi non si viene solo a mangiare — si viene a vivere un momento. Luci calde, tavoli curati, musica discreta e un servizio attento fanno di ogni serata da Food King un ricordo che vale la pena ripetere.</p>
+      </div>
     </div>
-    <!-- #facts -->
+  </div>
+</div>
+<div class="zig-bottom-light"></div>
 
-
-
-
-    <div id="food-menu" class="light-wrapper">
-        <section class="ss-style-top"></section>
-        <div class="container inner">
-            <h2 class="section-title text-center">Menu Piatti</h2>
-            <p class="lead main text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit!</p>
-
-            <div class="row">
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/hot-drinks.png" alt="Hot Drinks"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Bevande Calde</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Espresso</li>
-                            <li>Americano</li>
-                            <li>Capuccino</li>
-                            <li>Latte</li>
-                            <li>Mocaccino</li>
-                            <li>Cioccolato Caldo</li>
-                            <li>Tè alla Frutta</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/ice-drinks.png" alt="Ice Drinks"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Bevande Fredde</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Ice Coffee</li>
-                            <li>Americano</li>
-                            <li>Latte</li>
-                            <li>Vanilla Frappe</li>
-                            <li>Espresso Frappe</li>
-                            <li>Choco Frappe</li>
-                            <li>Iced Chai</li>
-                            <li>Fruit Fresh</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/smoothies.png" alt="Smoothies"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Frullati</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Mango</li>
-                            <li>Strawberry</li>
-                            <li>Blue Berry</li>
-                            <li>Peach</li>
-                            <li>Pineapple</li>
-                            <li>Banana</li>
-                            <li>Milkshake</li>
-                            <li>Greens</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/deserts.png" alt="Deserts"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Desserts</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Cheesecake</li>
-                            <li>Choco Pie</li>
-                            <li>Pancakes</li>
-                            <li>Muffins</li>
-                            <li>Fruit Slices</li>
-                            <li>Fruit Salad</li>
-                            <li>Cream Cake</li>
-                            <li>Ice Cream</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/cocktails.png" alt="Hot Drinks"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Cocktails</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Black Velvet</li>
-                            <li>Gin Sour</li>
-                            <li>Mojito</li>
-                            <li>Long Island</li>
-                            <li>Orgasm</li>
-                            <li>Bloody Mary</li>
-                            <li>Earthquake</li>
-                            <li>Whisky Mac</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/beer.png" alt="Ice Drinks"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Birre</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Lager</li>
-                            <li>Blonde Beer</li>
-                            <li>Black Beer</li>
-                            <li>Blonde Ale</li>
-                            <li>Pilsner</li>
-                            <li>Lemon Beer</li>
-                            <li>Unfiltered Beer</li>
-                            <li>Non-Alcoholic</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/wine.png" alt="Smoothies"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Vini</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Sweet Red</li>
-                            <li>Dry Red</li>
-                            <li>Sweet White</li>
-                            <li>Dry White</li>
-                            <li>Rose</li>
-                            <li>Sparkling Wine</li>
-                            <li>Fortified Wine</li>
-                            <li>Frutty Red</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3">
-                    <div class="menu-images "><img src="img/menu/sprites.png" alt="Deserts"></div>
-                    <div class="menu-titles">
-                        <h1 class="">Alcolici</h1>
-                    </div>
-                    <div class="menu-items ">
-                        <ul>
-                            <li>Whisky</li>
-                            <li>Rum</li>
-                            <li>Tequila</li>
-                            <li>Gin</li>
-                            <li>Champagne</li>
-                            <li>Brandy</li>
-                            <li>Absinthe</li>
-                            <li>Liqueur</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
+<!-- FACTS -->
+<div id="facts">
+  <div class="section-inner">
+    <div class="facts-grid">
+      <div class="fact-item">
+        <div class="fact-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v5"/><path d="M13 12v5"/><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.44.5-3 .5"/><path d="M3 8h14v9.5A2.5 2.5 0 0 1 14.5 20h-9A2.5 2.5 0 0 1 3 17.5V8z"/><path d="M5 8V5.5A2.5 2.5 0 0 1 7.5 3H8"/><path d="M14 8V5.5A2.5 2.5 0 0 0 11.5 3H11"/></svg>
         </div>
-        <!-- /.container -->
-        <section class="ss-style-bottom"></section>
+        <h4>+120.000</h4>
+        <p>Pasti serviti</p>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">
+          <svg viewBox="0 0 24 24"><path d="M8 22h8M12 18v4M5 2h14l-1.5 6.5A2 2 0 0 1 15.56 10H8.44a2 2 0 0 1-1.94-1.5L5 2z"/></svg>
+        </div>
+        <h4>280+</h4>
+        <p>Etichette in carta</p>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">
+          <svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+        </div>
+        <h4>+450 kg</h4>
+        <p>Prodotti freschi/settimana</p>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h4>98%</h4>
+        <p>Ospiti soddisfatti</p>
+      </div>
     </div>
-    <!--/#food-menu-->
+  </div>
+</div>
 
-
-
-
-    <div id="special-offser" class="parallax pricing">
-        <div class="container inner">
-
-            <h2 class="section-title text-center">Offerte Speciali</h2>
-            <p class="lead main text-center">Lorem ipsum dolor sit amet consectetur, adipisicing elit!</p>
-
-            <div class="row">
-                <div class="col-md-6 col-sm-6">
-
-                    <div class="pricing-item">
-
-                        <a href="#"><img class="img-responsive img-thumbnail" src="img/dish/dish3.jpg" alt=""></a>
-
-                        <div class="pricing-item-details">
-
-                            <h3><a href="#">Lorem ipsum dolor</a></h3>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                            <a class="btn btn-danger" href="#">Button</a>
-                            <div class="clearfix"></div>
-                        </div>
-                        <!--price tag-->
-                        <span class="hot-tag br-red">€26</span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6">
-
-                    <div class="pricing-item">
-
-                        <a href="#"><img class="img-responsive img-thumbnail" src="img/dish/dish2.jpg" alt=""></a>
-
-                        <div class="pricing-item-details">
-
-                            <h3><a href="#">Lorem ipsum dolor</a></h3>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                            <a class="btn btn-danger" href="#">Button</a>
-                            <div class="clearfix"></div>
-                        </div>
-                        <!--price tag-->
-                        <span class="hot-tag br-lblue">€37</span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="clearfix visible-md"></div>
-                <div class="col-md-6 col-sm-6">
-
-                    <div class="pricing-item">
-
-                        <a href="#"><img class="img-responsive img-thumbnail" src="img/dish/dish4.jpg" alt=""></a>
-
-                        <div class="pricing-item-details">
-
-                            <h3><a href="#">Lorem ipsum dolor</a></h3>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                            <a class="btn btn-danger" href="#">Button</a>
-                            <div class="clearfix"></div>
-                        </div>
-                        <!--price tag-->
-                        <span class="hot-tag br-green">€54</span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6">
-
-                    <div class="pricing-item">
-
-                        <a href="#"><img class="img-responsive img-thumbnail" src="img/dish/dish1.jpg" alt=""></a>
-
-                        <div class="pricing-item-details">
-
-                            <h3><a href="#">Lorem ipsum dolor</a></h3>
-
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                            <a class="btn btn-danger" href="#">Button</a>
-                            <div class="clearfix"></div>
-                        </div>
-                        <!--price tag-->
-                        <span class="hot-tag br-red">€27</span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- /.container -->
+<!-- MENU PIATTI -->
+<div class="zig-top-light"></div>
+<div id="food-menu">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Menu Piatti</h2>
+      <p class="section-lead">Tutto il meglio della cucina italiana e internazionale, stagione per stagione</p>
     </div>
-    <!-- /#special-offser -->
-
-
-
-
-    <div id="reservation" class="light-wrapper">
-        <section class="ss-style-top"></section>
-        <div class="container inner">
-            <h2 class="section-title text-center">Prenota</h2>
-            <p class="lead main text-center">Prenota il tuo tavolo &amp; enjoy lorem Ipsum</p>
-            <div class="row">
-                <div class="col-md-6">
-                    <form class="form form-table" method="post" name="">
-                        <div class="form-group">
-                            <h4>Compila il modulo per prenotare il tavolo (tutti i campi sono abbligatori)</h4>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="first_name1">first name</label>
-                                <input class="form-control hint" type="text" id="first_name1" name="first_name" placeholder="Nome" required="">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="last_name1">last name</label>
-                                <input class="form-control hint" type="text" id="last_name1" name="last_name" placeholder="Cognome" required="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="email1">email</label>
-                                <input class="form-control hint" type="email" id="email1" name="email" placeholder="email@dominio.com" required="">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="phone1">phone</label>
-                                <input class="form-control hint" type="text" id="phone1" name="phone" placeholder="Telefono" required="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="reserv_date1">reservation date</label>
-                                <input class="form-control datepicker hasDatepicker hint" type="text" id="reserv_date1" name="reserv_date" placeholder="Data Prenotazione" required="">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="numb_guests1">number of guests</label>
-                                <input class="form-control hint" type="text" id="numb_guests1" name="numb_guests" placeholder="Numero persone" required="">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="alt_reserv_date1">time from</label>
-                                <input class="form-control datepicker hasDatepicker hint" type="text" id="alt_reserv_date1" name="alt_reserv_date" placeholder="Dalle ore" required="">
-                            </div>
-                            <div class="col-lg-6 col-md-6 form-group">
-                                <label class="sr-only" for="time1">time</label>
-                                <input class="form-control timepicker ui-timepicker-input hint" type="text" id="time1" name="time" placeholder="Alle ore" required="" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                <button type="submit" class="btn btn-danger btn-lg">Prenota!</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <!-- col-md-6 -->
-                <div class="col-md-5 col-md-offset-1">
-
-                    <h3><i class="fa fa-clock-o fa-fw"></i>Orari</h3>
-                    <h4>Colazione</h4>
-                    <p>Lun a Ven: 7:30 - 11:30 <br>Sab &amp; Dom: 8:00 - 9:00 </p>
-                    <h4>Pranzo</h4>
-                    <p>Lun a Ven: 12:00 - 17:00 </p>
-                    <h4>Cena</h4>
-                    <p>Lun to Sab: 18:00 - 24:00 <br>Dom: 17:30 - 24:00 </p>
-
-                    <h3><i class="fa fa-map-marker fa-fw"></i>Indicazioni</h3>
-                    <p>Roma, Italia, 00184 Via del Colosseo</p>
-
-                    <h3><i class="fa fa-mobile fa-fw"></i>Contatti</h3>
-                    <p>Email: <a href="mailto:yourname@meatking.com">tuaemail@dominio.com</a></p>
-                    <p>Telefono: +234 3456 678</p>
-
-                </div>
-                <!-- col-md-6 -->
-            </div>
-            <!-- /.services -->
-        </div>
-        <!-- /.container -->
-        <section class="ss-style-bottom"></section>
+    <div class="menu-row">
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/hot-drinks.png" alt="Bevande Calde"></div>
+        <h3>Bevande Calde</h3>
+        <ul>
+          <li>Espresso</li><li>Americano</li><li>Cappuccino</li>
+          <li>Latte</li><li>Mocaccino</li><li>Cioccolato Caldo</li><li>Tè alla Frutta</li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/ice-drinks.png" alt="Bevande Fredde"></div>
+        <h3>Bevande Fredde</h3>
+        <ul>
+          <li>Ice Coffee</li><li>Americano</li><li>Latte</li>
+          <li>Vanilla Frappe</li><li>Espresso Frappe</li><li>Choco Frappe</li><li>Iced Chai</li><li>Fruit Fresh</li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/smoothies.png" alt="Frullati"></div>
+        <h3>Frullati</h3>
+        <ul>
+          <li>Mango</li><li>Fragola</li><li>Mirtillo</li>
+          <li>Pesca</li><li>Ananas</li><li>Banana</li><li>Milkshake</li><li>Greens</li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/deserts.png" alt="Desserts"></div>
+        <h3>Desserts</h3>
+        <ul>
+          <li>Cheesecake</li><li>Torta al Cioccolato</li><li>Pancakes</li>
+          <li>Muffins</li><li>Frutta di Stagione</li><li>Insalata di Frutta</li><li>Torta della Casa</li><li>Gelato Artigianale</li>
+        </ul>
+      </div>
     </div>
-    <!-- #reservation -->
-
-
-
-    <div id="chefs" class="parallax pricing">
-        <div class="container inner">
-
-            <h2 class="section-title text-center">Chef</h2>
-            <p class="lead main text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit!</p>
-
-            <div class="row text-center chefs">
-                <div class="col-sm-4">
-                    <div class="col-wrapper">
-                        <div class="icon-wrapper">
-                            <img src="img/chefs/1.jpg">
-                        </div>
-                        <h3>Lorem ipsum</h3>
-                        <p>Vivamus sagittis lacuson augue laoreet rutrum faucibus dolor auctor. Cras mattis consectetur purus sit amet fermentum ultricies vehicula.</p>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="col-wrapper">
-                        <div class="icon-wrapper">
-                            <img src="img/chefs/3.jpg">
-                        </div>
-                        <h3>Lorem ipsum</h3>
-                        <p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient monte nascetur ultricies vehicula. </p>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="col-wrapper">
-                        <div class="icon-wrapper">
-                            <img src="img/chefs/2.jpg">
-                        </div>
-                        <h3>Lorem ipsum</h3>
-                        <p>Curabitur blandit matti tempus porttitor. Donec id elit non mi porta ut gravida at eget metus. Consectetur adipiscing elit ultricies vehicula.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!-- /.container -->
+    <div class="menu-row">
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/cocktails.png" alt="Cocktails"></div>
+        <h3>Cocktails</h3>
+        <ul>
+          <li>Black Velvet</li><li>Gin Sour</li><li>Mojito</li>
+          <li>Long Island</li><li>Orgasm</li><li>Bloody Mary</li><li>Earthquake</li><li>Whisky Mac</li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/beer.png" alt="Birre"></div>
+        <h3>Birre</h3>
+        <ul>
+          <li>Lager</li><li>Bionda</li><li>Birra Scura</li>
+          <li>Blonde Ale</li><li>Pilsner</li><li>Birra al Limone</li><li>Non Filtrata</li><li>Analcolica</li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/wine.png" alt="Vini"></div>
+        <h3>Vini</h3>
+        <ul>
+          <li>Rosso Dolce</li><li>Rosso Secco</li><li>Bianco Dolce</li>
+          <li>Bianco Secco</li><li>Rosé</li><li>Spumante</li><li>Passito</li><li>Prosecco DOC</li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <div class="menu-img-wrap"><img src="img/menu/sprites.png" alt="Alcolici"></div>
+        <h3>Alcolici</h3>
+        <ul>
+          <li>Whisky</li><li>Rum</li><li>Tequila</li>
+          <li>Gin</li><li>Champagne</li><li>Brandy</li><li>Assenzio</li><li>Liquori</li>
+        </ul>
+      </div>
     </div>
-    <!-- /#chefs -->
+  </div>
+</div>
+<div class="zig-bottom-light"></div>
 
-
-    <footer id="footer" class="dark-wrapper">
-        <section class="ss-style-top"></section>
-        <div class="container inner">
-            <div class="row">
-                <div class="col-sm-6">
-                    &copy; Copyright FoodKing 2018
-                    <br/>Creato da <a class="themeBy" href="http://www.linkforweb.com">Linkforweb - Web & Graphic Studio</a>
-                </div>
-                <div class="col-sm-6">
-                    <div class="social-bar">
-                        <a href="#" class="fa fa-instagram tooltipped" title=""></a>
-                        <a href="#" class="fa fa-youtube-square tooltipped" title=""></a>
-                        <a href="#" class="fa fa-facebook-square tooltipped" title=""></a>
-                        <a href="#" class="fa fa-pinterest-square tooltipped" title=""></a>
-                        <a href="#" class="fa fa-google-plus-square tooltipped" title=""></a>
-                    </div>
-                </div>
-            </div>
+<!-- OFFERTE SPECIALI -->
+<div id="special-offers">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Offerte Speciali</h2>
+      <p class="section-lead">I nostri piatti signature, selezionati per voi ogni settimana</p>
+    </div>
+    <div class="offers-grid">
+      <div class="offer-card">
+        <span class="price-tag price-red">€26</span>
+        <div class="offer-img"><img src="img/dish/dish3.jpg" alt="Filetto al pepe verde"></div>
+        <div class="offer-details">
+          <h3>Filetto al pepe verde</h3>
+          <p>Taglio pregiato di manzo irlandese, cotto in padella di ghisa con salsa al pepe verde, burro chiarificato e un tocco di Cognac. Servito con patate arrosto al rosmarino.</p>
+          <a class="btn-offer" href="#">Scopri</a>
         </div>
-        <!-- /.container -->
-    </footer>
+      </div>
+      <div class="offer-card">
+        <span class="price-tag price-blue">€37</span>
+        <div class="offer-img"><img src="img/dish/dish2.jpg" alt="Tagliata di manzo"></div>
+        <div class="offer-details">
+          <h3>Tagliata di manzo</h3>
+          <p>Controfiletto di Chianina IGP alla brace, affettato sottile su letto di rucola selvatica, scaglie di Parmigiano Reggiano 24 mesi e olio EVO del Molise.</p>
+          <a class="btn-offer" href="#">Scopri</a>
+        </div>
+      </div>
+      <div class="offer-card">
+        <span class="price-tag price-green">€54</span>
+        <div class="offer-img"><img src="img/dish/dish4.jpg" alt="Costata alla brace"></div>
+        <div class="offer-details">
+          <h3>Costata alla brace</h3>
+          <p>Costata Fiorentina da 800g di razza Angus, frollata 45 giorni, cotta su brace viva di legno di quercia. Sale marino e rosmarino fresco. Un classico senza compromessi.</p>
+          <a class="btn-offer" href="#">Scopri</a>
+        </div>
+      </div>
+      <div class="offer-card">
+        <span class="price-tag price-red">€27</span>
+        <div class="offer-img"><img src="img/dish/dish1.jpg" alt="Lombatello marinato"></div>
+        <div class="offer-details">
+          <h3>Lombatello marinato</h3>
+          <p>Taglio del lombatello marinato 24 ore in olio, aglio, timo e peperoncino calabrese. Grigliato a fuoco vivo, accompagnato da verdure di stagione arrostite e salsa chimichurri.</p>
+          <a class="btn-offer" href="#">Scopri</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <script src="js/jquery-2.1.3.min.js"></script>
-    <script src="js/jquery.actual.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/new-scroll-to.js"></script>
+<!-- PRENOTA -->
+<div class="zig-top-light"></div>
+<div id="reservation">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Prenota</h2>
+      <p class="section-lead">Riserva il tuo tavolo e preparati a un'esperienza indimenticabile</p>
+    </div>
+    <div class="reservation-grid">
+      <div class="res-form">
+        <h4>Compila il modulo per prenotare il tavolo (tutti i campi sono obbligatori)</h4>
+        <form onsubmit="handleBook(event)">
+          <div class="form-row">
+            <div class="form-field"><input type="text" placeholder="Nome" required></div>
+            <div class="form-field"><input type="text" placeholder="Cognome" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field"><input type="email" placeholder="email@dominio.com" required></div>
+            <div class="form-field"><input type="tel" placeholder="Telefono" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field"><input type="text" placeholder="Data prenotazione" required></div>
+            <div class="form-field"><input type="text" placeholder="Numero persone" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field"><input type="text" placeholder="Dalle ore" required></div>
+            <div class="form-field"><input type="text" placeholder="Alle ore" required></div>
+          </div>
+          <p class="form-note">Le prenotazioni sono confermate entro 2 ore via email o telefono. Per eventi e gruppi oltre 10 persone contattateci direttamente.</p>
+          <button type="submit" class="btn-book">Prenota!</button>
+        </form>
+      </div>
+      <div class="res-info">
+        <div class="res-info-block">
+          <h3>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Orari
+          </h3>
+          <h4>Colazione</h4>
+          <p>Lun a Ven: 7:30 – 11:30<br>Sab &amp; Dom: 8:00 – 10:00</p>
+          <h4>Pranzo</h4>
+          <p>Lun a Ven: 12:00 – 15:30</p>
+          <h4>Cena</h4>
+          <p>Lun a Sab: 18:30 – 24:00<br>Dom: 17:30 – 23:00</p>
+        </div>
+        <div class="res-info-block">
+          <h3>
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Dove siamo
+          </h3>
+          <p>Roma, 00184 — Via del Colosseo, 12</p>
+        </div>
+        <div class="res-info-block">
+          <h3>
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.49 2 2 0 0 1 3.54 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.27"/></svg>
+            Contatti
+          </h3>
+          <p>Email: <a href="mailto:info@foodking.it">info@foodking.it</a></p>
+          <p>Tel: +39 06 1234 5678</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="zig-bottom-light"></div>
+
+<!-- CHEF -->
+<div id="chefs">
+  <div class="section-inner">
+    <div class="section-header">
+      <h2 class="section-title">Chef</h2>
+      <p class="section-lead">I maestri dietro ogni piatto</p>
+    </div>
+    <div class="chefs-grid">
+      <div class="chef-card">
+        <div class="chef-img"><img src="img/chefs/1.jpg" alt="Marco Ferretti"></div>
+        <h3>Marco Ferretti</h3>
+        <p>Executive chef con 20 anni di esperienza tra Roma, Parigi e Barcellona. Specialista nelle carni alla brace e nelle rivisitazioni della cucina laziale in chiave contemporanea.</p>
+      </div>
+      <div class="chef-card">
+        <div class="chef-img"><img src="img/chefs/3.jpg" alt="Sofia Ricci"></div>
+        <h3>Sofia Ricci</h3>
+        <p>Pastry chef diplomata all'Institut Paul Bocuse di Lione. Porta in carta dessert che uniscono tecnica francese e ingredienti italiani d'eccellenza, dal pistacchio di Bronte al miele di Calabria.</p>
+      </div>
+      <div class="chef-card">
+        <div class="chef-img"><img src="img/chefs/2.jpg" alt="Giovanni Marra"></div>
+        <h3>Giovanni Marra</h3>
+        <p>Sommelier e chef di sala, Giovanni cura la carta vini con oltre 280 etichette selezionate in tutta Italia. Appassionato di mixology, firma anche i cocktail della casa con distillati artigianali.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="zig-top-red"></div>
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-copy">
+      &copy; 2025 Food King &mdash; Roma
+      <br><a href="http://www.linkforweb.com" target="_blank">Creato da Linkforweb - Web &amp; Graphic Studio</a>
+    </div>
+    <div class="social-bar">
+      <a href="#" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="#" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="#" aria-label="Pinterest">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+      </a>
+      <a href="#" aria-label="X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
 <div style="text-align:center;padding:10px 20px;background:rgba(0,0,0,.06);border-top:1px solid rgba(0,0,0,.1);font-size:.78rem;color:#6b7280;font-family:system-ui,sans-serif;">&#9888;&#65039; Sito web dimostrativo &mdash; il modulo contatti e la newsletter non sono funzionanti</div>
-</body>
 
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60), { passive: true });
+
+  // Hamburger drawer
+  const ham = document.getElementById('ham');
+  const drawer = document.getElementById('drawer');
+  ham.addEventListener('click', () => drawer.classList.add('open'));
+  document.getElementById('drawer-close').addEventListener('click', () => drawer.classList.remove('open'));
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => drawer.classList.remove('open')));
+
+  // Booking form demo
+  function handleBook(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-book');
+    btn.textContent = 'Prenotazione ricevuta ✓';
+    btn.style.background = '#27ae60';
+    setTimeout(() => { btn.textContent = 'Prenota!'; btn.style.background = ''; }, 3000);
+  }
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => io.observe(s));
+</script>
+</body>
 </html>
