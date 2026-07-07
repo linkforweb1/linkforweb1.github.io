@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardiologia — Medicdor Studio Medico</title>
+<link rel="icon" href="mp79o1gy-fav.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      oklch(98.5% 0.005 260);
+  --surface: oklch(100% 0 0);
+  --fg:      oklch(18% 0.01 260);
+  --muted:   oklch(50% 0.02 260);
+  --border:  oklch(90% 0.008 260);
+  --accent:  oklch(55% 0.22 265);
+  --accent2: oklch(75% 0.08 260);
+  --accent3: oklch(70% 0.12 290);
+  --accent-hover: oklch(50% 0.24 265);
+  --radius: 12px;
+  --max-w: 1200px;
+  --nav-h: 72px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+img { max-width: 100%; height: auto; display: block; }
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: var(--nav-h);
+  display: flex; align-items: center;
+  transition: background .3s, box-shadow .3s;
+}
+nav.scrolled { background: rgba(255,255,255,.95); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--border); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; color: var(--fg); }
+.nav-logo img { height: 28px; width: auto; }
+.nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+.nav-links a {
+  color: var(--muted); font-size: .9rem; font-weight: 500;
+  transition: color .2s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 2px; background: var(--accent); transform: scaleX(0);
+  transition: transform .2s; border-radius: 1px;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: var(--accent); color: #fff !important; padding: 8px 20px;
+  border-radius: 8px; font-weight: 600; transition: background .2s;
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: var(--accent-hover); color: #fff !important; }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+.hamburger span {
+  display: block; width: 24px; height: 2px; background: var(--fg);
+  border-radius: 2px; transition: transform .3s, opacity .3s;
+}
+.hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.drawer-overlay {
+  position: fixed; inset: 0; z-index: 998; background: rgba(0,0,0,.3);
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 999;
+  width: min(320px, 80vw); background: var(--surface);
+  padding: 96px 32px 32px; transform: translateX(100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column; gap: 8px;
+  box-shadow: -4px 0 24px rgba(0,0,0,.08);
+}
+.drawer.open { transform: translateX(0); }
+.drawer a {
+  color: var(--fg); font-size: 1.05rem; font-weight: 500;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  transition: color .2s;
+}
+.drawer a:hover { color: var(--accent); }
+.drawer .drawer-cta {
+  margin-top: 16px; background: var(--accent); color: #fff !important;
+  text-align: center; padding: 14px; border-radius: 8px; border: none;
+  font-weight: 600; font-size: 1rem;
+}
+
+/* Service hero */
+.service-hero {
+  padding: calc(var(--nav-h) + 48px) 0 64px;
+  background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%);
+}
+.service-hero-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 48px; align-items: center;
+}
+.service-hero-info { }
+.service-hero-badge {
+  display: inline-block; background: var(--accent2); color: var(--accent);
+  padding: 6px 16px; border-radius: 100px; font-size: .85rem;
+  font-weight: 600; margin-bottom: 16px;
+}
+.service-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+  line-height: 1.1; margin-bottom: 16px; letter-spacing: -.02em;
+}
+.service-hero p {
+  font-size: 1.05rem; color: var(--muted); line-height: 1.7;
+  margin-bottom: 28px; max-width: 520px;
+}
+.service-hero-image {
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,.08);
+}
+.service-hero-image img { width: 100%; height: 400px; object-fit: cover; }
+
+/* Sections */
+section { padding: 80px 0; }
+.section-label {
+  display: inline-block; font-size: .8rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em; color: var(--accent);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700;
+  line-height: 1.2; margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 1rem; color: var(--muted); max-width: 640px;
+  line-height: 1.7;
+}
+
+/* Approach */
+.approach-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; margin-top: 40px;
+}
+.approach-card {
+  padding: 28px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  transition: transform .2s, box-shadow .2s;
+}
+.approach-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.06); }
+.approach-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--accent2); display: flex; align-items: center;
+  justify-content: center; font-size: 1.3rem; margin-bottom: 16px;
+}
+.approach-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+.approach-card p { font-size: .9rem; color: var(--muted); line-height: 1.6; }
+
+/* Conditions */
+.conditions { background: var(--surface); }
+.conditions-list {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-top: 40px; max-width: 800px;
+}
+.condition-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px; background: var(--bg);
+  border-radius: var(--radius); border: 1px solid var(--border);
+}
+.condition-item::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+.condition-item span { font-size: .95rem; }
+
+/* Exams */
+.exams-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; margin-top: 40px;
+}
+.exam-card {
+  padding: 24px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--surface);
+  text-align: center;
+}
+.exam-card h3 { font-size: 1rem; margin-bottom: 8px; }
+.exam-card p { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  padding: 80px 0; text-align: center;
+}
+.cta-section h2 { color: #fff; font-size: clamp(1.5rem, 3vw, 2.2rem); margin-bottom: 12px; }
+.cta-section p { color: rgba(255,255,255,.8); font-size: 1.05rem; margin-bottom: 28px; }
+.cta-section .btn {
+  background: #fff; color: var(--accent); padding: 16px 36px;
+  font-size: 1rem; font-weight: 700;
+}
+.cta-section .btn:hover { background: rgba(255,255,255,.9); color: var(--accent-hover); transform: translateY(-2px); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 8px; font-weight: 600;
+  font-size: .95rem; transition: all .2s; cursor: pointer;
+  border: none; font-family: var(--font);
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,103,255,.3); }
+.btn-outline { background: transparent; color: var(--fg); border: 1.5px solid var(--border); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(37,103,255,.04); }
+
+/* Footer */
+footer {
+  background: var(--fg); color: rgba(255,255,255,.8);
+  padding: 64px 0 32px;
+}
+.footer-grid {
+  display: flex; flex-wrap: wrap; gap: 48px;
+  padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.1);
+  justify-content: space-between;
+}
+.footer-brand { flex: 2; min-width: 280px; }
+.footer-brand p { font-size: .9rem; margin-top: 12px; line-height: 1.7; max-width: 360px; color: rgba(255,255,255,.6); }
+.footer-info { flex: 1; min-width: 200px; }
+footer h4 { color: #fff; font-size: .95rem; margin-bottom: 16px; font-weight: 600; }
+footer a { color: rgba(255,255,255,.6); font-size: .9rem; transition: color .2s; }
+footer a:hover { color: #fff; }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 24px; font-size: .85rem; color: rgba(255,255,255,.4);
+}
+.footer-social { display: flex; gap: 12px; }
+.footer-social a {
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; transition: border-color .2s, background .2s;
+}
+.footer-social a:hover { border-color: var(--accent); background: rgba(37,103,255,.15); }
+
+@media (max-width: 1024px) {
+  .approach-grid { grid-template-columns: repeat(2, 1fr); }
+  .exams-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .service-hero-inner { grid-template-columns: 1fr; }
+  .service-hero-image { order: -1; }
+  .service-hero-image img { height: 280px; }
+  .approach-grid { grid-template-columns: 1fr; }
+  .conditions-list { grid-template-columns: 1fr; }
+  .exams-grid { grid-template-columns: 1fr; }
+  section { padding: 56px 0; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="medicdor-home.html" class="nav-logo">
+      <img src="mp79o1h2-logo.png" alt="Medicdor">
+    </a>
+    <ul class="nav-links">
+      <li><a href="medicdor-home.html">Home</a></li>
+      <li><a href="medicdor-home.html#about">Chi Siamo</a></li>
+      <li><a href="medicdor-home.html#services">Servizi</a></li>
+      <li><a href="medicdor-home.html#team">Team</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="medicdor-home.html#contact">Contatti</a></li>
+      <li><a href="medicdor-home.html#booking" class="nav-cta">Prenota</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <a href="medicdor-home.html" class="drawer-link">Home</a>
+  <a href="medicdor-home.html#about" class="drawer-link">Chi Siamo</a>
+  <a href="medicdor-home.html#services" class="drawer-link">Servizi</a>
+  <a href="medicdor-home.html#team" class="drawer-link">Team</a>
+  <a href="medicdor-home.html#testimonials" class="drawer-link">Testimonianze</a>
+  <a href="blog.html" class="drawer-link">Blog</a>
+  <a href="medicdor-home.html#faq" class="drawer-link">FAQ</a>
+  <a href="medicdor-home.html#contact" class="drawer-link">Contatti</a>
+  <a href="medicdor-home.html#booking" class="drawer-cta">Prenota Visita</a>
+</div>
+
+<section class="service-hero">
+  <div class="container">
+    <div class="service-hero-inner">
+      <div class="service-hero-info">
+        <span class="service-hero-badge">Cardiologia</span>
+        <h1>Specialisti per la salute del tuo cuore</h1>
+        <p>La cardiologia Medicdor offre diagnosi, cura e prevenzione delle patologie cardiovascolari con tecnologie all'avanguardia e un approccio centrato sulla persona. Ogni paziente riceve un percorso personalizzato.</p>
+        <a href="medicdor-home.html#booking" class="btn btn-primary">Prenota una visita</a>
+      </div>
+      <div class="service-hero-image">
+        <img src="mp79o1gw-c1.jpg" alt="Cardiologia" loading="eager">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div style="text-align:center;">
+      <span class="section-label">Il Nostro Approccio</span>
+      <h2 class="section-title">Eccellenza cardiovascolare</h2>
+      <p class="section-desc" style="margin:0 auto;">Un percorso completo che integra diagnosi precoce, terapia personalizzata e follow-up costante per garantire la migliore qualità di vita.</p>
+    </div>
+    <div class="approach-grid">
+      <div class="approach-card">
+        <div class="approach-icon">♥</div>
+        <h3>Diagnostica avanzata</h3>
+        <p>Elettrocardiogramma dinamico, ecocardiografia, test da sforzo e Holter pressorio per una valutazione completa della funzione cardiaca.</p>
+      </div>
+      <div class="approach-card">
+        <div class="approach-icon">◉</div>
+        <h3>Terapie personalizzate</h3>
+        <p>Piani terapeutici su misura che combinano farmacologia moderna, modifiche dello stile di vita e, quando necessario, supporto interventistico.</p>
+      </div>
+      <div class="approach-card">
+        <div class="approach-icon">✦</div>
+        <h3>Follow-up continuo</h3>
+        <p>Monitoraggio periodico delle condizioni cardiache con check-up programmati e telemedicina per i pazienti cronici.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="conditions">
+  <div class="container">
+    <div style="text-align:center;">
+      <span class="section-label">Patologie Trattate</span>
+      <h2 class="section-title">Cosa curiamo</h2>
+      <p class="section-desc" style="margin:0 auto;">Dal trattamento delle patologie più comuni alla gestione delle condizioni complesse.</p>
+    </div>
+    <div class="conditions-list">
+      <div class="condition-item"><span>Ipertensione arteriosa</span></div>
+      <div class="condition-item"><span>Cardiopatia ischemica</span></div>
+      <div class="condition-item"><span>Aritmie cardiache</span></div>
+      <div class="condition-item"><span>Scompenso cardiaco</span></div>
+      <div class="condition-item"><span>Valvulopatie</span></div>
+      <div class="condition-item"><span>Cardiomiopatie</span></div>
+      <div class="condition-item"><span>Ipercolesterolemia familiare</span></div>
+      <div class="condition-item"><span>Malattie pericardiche</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div style="text-align:center;">
+      <span class="section-label">Esami Strumentali</span>
+      <h2 class="section-title">Diagnostica cardiologica</h2>
+      <p class="section-desc" style="margin:0 auto;">Tecnologie di ultima generazione per una diagnosi precisa e tempestiva.</p>
+    </div>
+    <div class="exams-grid">
+      <div class="exam-card">
+        <h3>ECG</h3>
+        <p>Elettrocardiogramma a riposo per la valutazione dell'attività elettrica del cuore.</p>
+      </div>
+      <div class="exam-card">
+        <h3>Ecocardiogramma</h3>
+        <p>Ecografia cardiaca per lo studio di struttura, funzione e flussi cardiaci.</p>
+      </div>
+      <div class="exam-card">
+        <h3>Holter</h3>
+        <p>Monitoraggio ECG dinamico delle 24 ore per la rilevazione di aritmie silenti.</p>
+      </div>
+      <div class="exam-card">
+        <h3>Test da sforzo</h3>
+        <p>Prova ergometrica per valutare la risposta cardiaca all'attività fisica controllata.</p>
+      </div>
+      <div class="exam-card">
+        <h3>Holter pressorio</h3>
+        <p>Monitoraggio della pressione arteriosa nelle 24 ore per un profilo pressorio completo.</p>
+      </div>
+      <div class="exam-card">
+        <h3>Visita cardiologica</h3>
+        <p>Valutazione specialistica completa con anamnesi, esame obiettivo e piano diagnostico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Prenditi cura del tuo cuore</h2>
+    <p>Prenota una visita cardiologica con i nostri specialisti.</p>
+    <a href="medicdor-home.html#booking" class="btn">Prenota ora</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="mp79o1h2-logo.png" alt="Medicdor" style="height:28px;filter:brightness(0) invert(1);">
+        <p>Medicdor Studio Medico — da oltre 20 anni al servizio della tua salute con professionalità, innovazione e un approccio umano.</p>
+      </div>
+      <div class="footer-info">
+        <h4>Contatti</h4>
+        <p style="color:rgba(255,255,255,.6);font-size:.9rem;line-height:1.8;">
+          Via della Salute 123, 00100 Roma<br>
+          <a href="tel:+390612345678">06 1234 5678</a><br>
+          <a href="mailto:info@medicdor.it">info@medicdor.it</a><br>
+          Lun–Ven 08:00–20:00 · Sab 09:00–13:00
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Medicdor — Tutti i diritti riservati</span>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook">F</a>
+        <a href="#" aria-label="Instagram">I</a>
+        <a href="#" aria-label="LinkedIn">L</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+const hamburger = document.getElementById('hamburger');
+const drawer = document.getElementById('drawer');
+const overlay = document.getElementById('drawerOverlay');
+
+function openDrawer() {
+  hamburger.classList.add('active');
+  drawer.classList.add('open');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  hamburger.classList.remove('active');
+  drawer.classList.remove('open');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+hamburger.addEventListener('click', () => {
+  drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+});
+overlay.addEventListener('click', closeDrawer);
+document.querySelectorAll('.drawer-link').forEach(a => a.addEventListener('click', closeDrawer));
+</script>
+
+</body>
+</html>
