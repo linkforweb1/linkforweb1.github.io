@@ -142,6 +142,9 @@ section .inner { max-width: var(--max-w); margin: 0 auto; }
   font-weight: 600;
   background: oklch(35% 0.04 260);
   color: #fff;
+  overflow: hidden;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 .social-proof .avatars .avatar:last-child { margin-right: 0; }
 .social-proof .stats { display: flex; gap: 20px; }
@@ -414,7 +417,6 @@ footer .bottom { border-top: 1px solid var(--border); margin-top: 40px; padding-
   <div class="inner">
     <a class="logo" href="#">
       <img src="immagini/logo.png" alt="Agencyerive">
-      <span>Agencyerive</span>
     </a>
     <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -438,10 +440,10 @@ footer .bottom { border-top: 1px solid var(--border); margin-top: 40px; padding-
       <a href="#contatti" class="btn btn-primary">Contattaci</a>
       <div class="social-proof">
         <div class="avatars">
-          <div class="avatar">MR</div>
-          <div class="avatar">LG</div>
-          <div class="avatar">AB</div>
-          <div class="avatar">CS</div>
+          <img class="avatar" src="immagini/avatar-mr.jpg" alt="Cliente">
+          <img class="avatar" src="immagini/avatar-lg.jpg" alt="Cliente">
+          <img class="avatar" src="immagini/avatar-ab.jpg" alt="Cliente">
+          <img class="avatar" src="immagini/avatar-cs.jpg" alt="Cliente">
           <div class="avatar">+</div>
         </div>
         <div class="stats">
