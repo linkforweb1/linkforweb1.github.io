@@ -146,6 +146,11 @@ nav .links a:hover { color: var(--fg); text-decoration: none; }
   display: flex;
   align-items: center;
   padding-top: 80px;
+  background-image:
+    linear-gradient(oklch(58% 0.18 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(58% 0.18 255 / 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center center;
 }
 .hero-grid {
   display: grid;
@@ -302,14 +307,9 @@ nav .links a:hover { color: var(--fg); text-decoration: none; }
 .progetto-card:hover { border-color: var(--accent); }
 .progetto-card .thumb {
   aspect-ratio: 16/10;
-  background: var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
+  width: 100%;
+  object-fit: cover;
+  display: block;
 }
 .progetto-card .info { padding: 20px; }
 .progetto-card .info .cat {
@@ -677,7 +677,7 @@ footer .social a:hover { color: var(--accent); }
     <h2>Progetti</h2>
     <div class="progetti-grid">
       <div class="progetto-card">
-        <div class="thumb">Screenshot eCommerce</div>
+        <img class="thumb" src="proj-moda.jpg" alt="Maison Moda eCommerce" loading="lazy">
         <div class="info">
           <div class="cat">Shopify</div>
           <h3>Maison Moda</h3>
@@ -685,7 +685,7 @@ footer .social a:hover { color: var(--accent); }
         </div>
       </div>
       <div class="progetto-card">
-        <div class="thumb">Screenshot SEO</div>
+        <img class="thumb" src="proj-seo.jpg" alt="Toolify SaaS SEO dashboard" loading="lazy">
         <div class="info">
           <div class="cat">SEO</div>
           <h3>Toolify SaaS</h3>
@@ -693,7 +693,7 @@ footer .social a:hover { color: var(--accent); }
         </div>
       </div>
       <div class="progetto-card">
-        <div class="thumb">Screenshot Sito</div>
+        <img class="thumb" src="proj-legale.jpg" alt="Studio Legale Bianchi sito WordPress" loading="lazy">
         <div class="info">
           <div class="cat">WordPress</div>
           <h3>Studio Legale Bianchi</h3>
