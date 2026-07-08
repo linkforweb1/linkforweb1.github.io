@@ -6,7 +6,7 @@
   <title>Food King — Ristorante Roma</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +21,7 @@
       --text-light: #666;
       --nav-h: 68px;
       --max-w: 1140px;
-      --font-h: 'Playfair Display', Georgia, serif;
+      --font-h: 'Oswald', sans-serif;
       --font-b: 'Nunito', system-ui, sans-serif;
     }
 
@@ -100,12 +100,12 @@
     }
     .hero-subtitle {
       margin-top: 12px;
-      display: inline-block; background: var(--white);
+      display: flex; justify-content: center;
     }
     .hero-subtitle h4 {
       font-family: var(--font-h); font-size: clamp(18px, 3vw, 32px);
       color: var(--red); padding: 4px 18px; font-weight: 600;
-      font-style: italic; letter-spacing: 1px;
+      font-style: italic; letter-spacing: 1px; background: var(--white);
     }
     .hero-arrow {
       position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
@@ -136,6 +136,7 @@
         linear-gradient(315deg, var(--red) 50%, transparent 50%),
         linear-gradient(45deg, var(--red) 50%, transparent 50%);
       background-size: 25px 30px;
+      position: relative; z-index: 1; margin-top: -30px;
     }
 
     /* ── SHARED SECTION STYLES ── */
@@ -186,21 +187,48 @@
 
     /* ── MENU PIATTI ── */
     #food-menu { background: var(--light); padding: 100px 0; }
-    .menu-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-bottom: 40px; }
-    .menu-col { text-align: center; }
-    .menu-img-wrap {
-      width: 130px; height: 130px; border-radius: 50%; overflow: hidden;
-      border: 4px solid var(--red); margin: 0 auto 18px;
+    .menu-tabs {
+      display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+      border-bottom: 2px solid #e0e0e0; padding-bottom: 0; margin-bottom: 0;
     }
-    .menu-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .menu-col h3 {
-      font-family: var(--font-h); font-size: 1.1rem; color: var(--red);
-      font-weight: 700; margin-bottom: 14px; padding-bottom: 10px;
-      border-bottom: 1px solid #e0e0e0;
+    .menu-tab {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 12px 18px 15px; border: none; background: none; cursor: pointer;
+      font-family: var(--font-b); font-size: .75rem; font-weight: 700;
+      color: var(--text-light); text-transform: uppercase; letter-spacing: .5px;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      transition: color .2s, border-color .2s;
     }
-    .menu-col ul { padding: 0; }
-    .menu-col li { font-size: .88rem; color: var(--text-light); padding: 5px 0; border-bottom: 1px dotted #e8e8e8; }
-    .menu-col li:last-child { border-bottom: none; }
+    .menu-tab img { width: 120px; height: 40px; object-fit: contain; }
+    .menu-tab.active { color: var(--red); border-bottom-color: var(--red); }
+    .menu-tab:hover:not(.active) { color: var(--dark); }
+    .menu-panels { margin-top: 48px; }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+    .menu-panel-header {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+      padding-bottom: 20px; border-bottom: 1px solid #e8e8e8;
+    }
+    .menu-panel-header img { width: 180px; height: 60px; object-fit: contain; }
+    .menu-panel-header h3 {
+      font-family: var(--font-h); font-size: 1.7rem; color: var(--dark);
+      font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .menu-items-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: #e8e8e8; border-radius: 8px; overflow: hidden;
+    }
+    .menu-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; background: var(--light);
+      font-size: .9rem; color: var(--text);
+      transition: background .15s;
+    }
+    .menu-item:hover { background: #fff5f5; color: var(--red); }
+    .menu-item::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--red); flex-shrink: 0;
+    }
 
     /* ── OFFERTE SPECIALI ── */
     #special-offers {
@@ -244,7 +272,7 @@
 
     /* ── PRENOTA ── */
     #reservation { background: var(--light); padding: 100px 0; }
-    .reservation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .reservation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; max-width: 860px; margin: 0 auto; }
     .res-form h4 { font-size: 1rem; color: var(--text); margin-bottom: 24px; font-family: var(--font-b); font-weight: 600; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
     .form-field { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
@@ -312,7 +340,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .menu-row { grid-template-columns: repeat(2, 1fr); }
+      .menu-items-grid { grid-template-columns: repeat(3, 1fr); }
       .offers-grid { grid-template-columns: 1fr; }
       .facts-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
     }
@@ -329,7 +357,9 @@
       #facts, #special-offers, #chefs { padding: 80px 0; }
       .story-grid { grid-template-columns: 1fr; gap: 40px; }
       .facts-grid { grid-template-columns: repeat(2, 1fr); }
-      .menu-row { grid-template-columns: repeat(2, 1fr); }
+      .menu-tabs { gap: 2px; }
+      .menu-tab { padding: 8px 10px 11px; font-size: .72rem; }
+      .menu-items-grid { grid-template-columns: repeat(2, 1fr); }
       .chefs-grid { grid-template-columns: 1fr; gap: 36px; }
       .reservation-grid { grid-template-columns: 1fr; gap: 40px; }
       .form-row { grid-template-columns: 1fr; }
@@ -338,7 +368,7 @@
     }
     @media (max-width: 480px) {
       .facts-grid { grid-template-columns: 1fr 1fr; }
-      .menu-row { grid-template-columns: 1fr 1fr; }
+      .menu-items-grid { grid-template-columns: 1fr 1fr; }
       .offer-card { flex-direction: column; }
       .offer-img { width: 100%; }
       .offer-img img { width: 100%; height: 200px; }
@@ -480,72 +510,144 @@
       <h2 class="section-title">Menu Piatti</h2>
       <p class="section-lead">Tutto il meglio della cucina italiana e internazionale, stagione per stagione</p>
     </div>
-    <div class="menu-row">
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/hot-drinks.png" alt="Bevande Calde"></div>
-        <h3>Bevande Calde</h3>
-        <ul>
-          <li>Espresso</li><li>Americano</li><li>Cappuccino</li>
-          <li>Latte</li><li>Mocaccino</li><li>Cioccolato Caldo</li><li>Tè alla Frutta</li>
-        </ul>
-      </div>
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/ice-drinks.png" alt="Bevande Fredde"></div>
-        <h3>Bevande Fredde</h3>
-        <ul>
-          <li>Ice Coffee</li><li>Americano</li><li>Latte</li>
-          <li>Vanilla Frappe</li><li>Espresso Frappe</li><li>Choco Frappe</li><li>Iced Chai</li><li>Fruit Fresh</li>
-        </ul>
-      </div>
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/smoothies.png" alt="Frullati"></div>
-        <h3>Frullati</h3>
-        <ul>
-          <li>Mango</li><li>Fragola</li><li>Mirtillo</li>
-          <li>Pesca</li><li>Ananas</li><li>Banana</li><li>Milkshake</li><li>Greens</li>
-        </ul>
-      </div>
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/deserts.png" alt="Desserts"></div>
-        <h3>Desserts</h3>
-        <ul>
-          <li>Cheesecake</li><li>Torta al Cioccolato</li><li>Pancakes</li>
-          <li>Muffins</li><li>Frutta di Stagione</li><li>Insalata di Frutta</li><li>Torta della Casa</li><li>Gelato Artigianale</li>
-        </ul>
-      </div>
+    <div class="menu-tabs" role="tablist">
+      <button class="menu-tab active" data-tab="hot-drinks" role="tab"><img src="img/menu/hot-drinks.png" alt="">Bevande Calde</button>
+      <button class="menu-tab" data-tab="ice-drinks" role="tab"><img src="img/menu/ice-drinks.png" alt="">Bevande Fredde</button>
+      <button class="menu-tab" data-tab="smoothies" role="tab"><img src="img/menu/smoothies.png" alt="">Frullati</button>
+      <button class="menu-tab" data-tab="deserts" role="tab"><img src="img/menu/deserts.png" alt="">Desserts</button>
+      <button class="menu-tab" data-tab="cocktails" role="tab"><img src="img/menu/cocktails.png" alt="">Cocktails</button>
+      <button class="menu-tab" data-tab="beer" role="tab"><img src="img/menu/beer.png" alt="">Birre</button>
+      <button class="menu-tab" data-tab="wine" role="tab"><img src="img/menu/wine.png" alt="">Vini</button>
+      <button class="menu-tab" data-tab="spirits" role="tab"><img src="img/menu/sprites.png" alt="">Alcolici</button>
     </div>
-    <div class="menu-row">
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/cocktails.png" alt="Cocktails"></div>
-        <h3>Cocktails</h3>
-        <ul>
-          <li>Black Velvet</li><li>Gin Sour</li><li>Mojito</li>
-          <li>Long Island</li><li>Orgasm</li><li>Bloody Mary</li><li>Earthquake</li><li>Whisky Mac</li>
-        </ul>
+    <div class="menu-panels">
+      <div class="menu-panel active" id="panel-hot-drinks">
+        <div class="menu-panel-header">
+          <img src="img/menu/hot-drinks.png" alt="Bevande Calde">
+          <h3>Bevande Calde</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Espresso</div>
+          <div class="menu-item">Americano</div>
+          <div class="menu-item">Cappuccino</div>
+          <div class="menu-item">Latte Macchiato</div>
+          <div class="menu-item">Mocaccino</div>
+          <div class="menu-item">Cioccolato Caldo</div>
+          <div class="menu-item">Tè alla Frutta</div>
+          <div class="menu-item">Caffè Corretto</div>
+        </div>
       </div>
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/beer.png" alt="Birre"></div>
-        <h3>Birre</h3>
-        <ul>
-          <li>Lager</li><li>Bionda</li><li>Birra Scura</li>
-          <li>Blonde Ale</li><li>Pilsner</li><li>Birra al Limone</li><li>Non Filtrata</li><li>Analcolica</li>
-        </ul>
+      <div class="menu-panel" id="panel-ice-drinks">
+        <div class="menu-panel-header">
+          <img src="img/menu/ice-drinks.png" alt="Bevande Fredde">
+          <h3>Bevande Fredde</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Ice Coffee</div>
+          <div class="menu-item">Americano Freddo</div>
+          <div class="menu-item">Latte Ghiacciato</div>
+          <div class="menu-item">Vanilla Frappe</div>
+          <div class="menu-item">Espresso Frappe</div>
+          <div class="menu-item">Choco Frappe</div>
+          <div class="menu-item">Iced Chai</div>
+          <div class="menu-item">Fruit Fresh</div>
+        </div>
       </div>
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/wine.png" alt="Vini"></div>
-        <h3>Vini</h3>
-        <ul>
-          <li>Rosso Dolce</li><li>Rosso Secco</li><li>Bianco Dolce</li>
-          <li>Bianco Secco</li><li>Rosé</li><li>Spumante</li><li>Passito</li><li>Prosecco DOC</li>
-        </ul>
+      <div class="menu-panel" id="panel-smoothies">
+        <div class="menu-panel-header">
+          <img src="img/menu/smoothies.png" alt="Frullati">
+          <h3>Frullati</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Mango Tropicale</div>
+          <div class="menu-item">Fragola e Banana</div>
+          <div class="menu-item">Mirtillo Selvatico</div>
+          <div class="menu-item">Pesca e Albicocca</div>
+          <div class="menu-item">Ananas e Cocco</div>
+          <div class="menu-item">Banana Caramello</div>
+          <div class="menu-item">Milkshake Vaniglia</div>
+          <div class="menu-item">Green Detox</div>
+        </div>
       </div>
-      <div class="menu-col">
-        <div class="menu-img-wrap"><img src="img/menu/sprites.png" alt="Alcolici"></div>
-        <h3>Alcolici</h3>
-        <ul>
-          <li>Whisky</li><li>Rum</li><li>Tequila</li>
-          <li>Gin</li><li>Champagne</li><li>Brandy</li><li>Assenzio</li><li>Liquori</li>
-        </ul>
+      <div class="menu-panel" id="panel-deserts">
+        <div class="menu-panel-header">
+          <img src="img/menu/deserts.png" alt="Desserts">
+          <h3>Desserts</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Cheesecake ai Frutti Rossi</div>
+          <div class="menu-item">Torta al Cioccolato Fondente</div>
+          <div class="menu-item">Pancakes con Sciroppo d'Acero</div>
+          <div class="menu-item">Muffins al Burro di Arachidi</div>
+          <div class="menu-item">Frutta di Stagione</div>
+          <div class="menu-item">Insalata di Frutta Esotica</div>
+          <div class="menu-item">Torta della Casa</div>
+          <div class="menu-item">Gelato Artigianale</div>
+        </div>
+      </div>
+      <div class="menu-panel" id="panel-cocktails">
+        <div class="menu-panel-header">
+          <img src="img/menu/cocktails.png" alt="Cocktails">
+          <h3>Cocktails</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Black Velvet</div>
+          <div class="menu-item">Gin Sour</div>
+          <div class="menu-item">Mojito Classico</div>
+          <div class="menu-item">Long Island Iced Tea</div>
+          <div class="menu-item">Negroni Sbagliato</div>
+          <div class="menu-item">Bloody Mary</div>
+          <div class="menu-item">Aperol Spritz</div>
+          <div class="menu-item">Whisky Sour</div>
+        </div>
+      </div>
+      <div class="menu-panel" id="panel-beer">
+        <div class="menu-panel-header">
+          <img src="img/menu/beer.png" alt="Birre">
+          <h3>Birre</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Lager alla Spina</div>
+          <div class="menu-item">Bionda Artigianale</div>
+          <div class="menu-item">Birra Scura Stout</div>
+          <div class="menu-item">Blonde Ale Belga</div>
+          <div class="menu-item">Pilsner Ceca</div>
+          <div class="menu-item">Birra al Limone</div>
+          <div class="menu-item">Non Filtrata</div>
+          <div class="menu-item">Analcolica Artigianale</div>
+        </div>
+      </div>
+      <div class="menu-panel" id="panel-wine">
+        <div class="menu-panel-header">
+          <img src="img/menu/wine.png" alt="Vini">
+          <h3>Vini</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Rosso Dolce IGT</div>
+          <div class="menu-item">Brunello di Montalcino</div>
+          <div class="menu-item">Bianco Dolce DOC</div>
+          <div class="menu-item">Vermentino di Sardegna</div>
+          <div class="menu-item">Rosé Provenzale</div>
+          <div class="menu-item">Franciacorta Brut</div>
+          <div class="menu-item">Passito di Pantelleria</div>
+          <div class="menu-item">Prosecco DOC Treviso</div>
+        </div>
+      </div>
+      <div class="menu-panel" id="panel-spirits">
+        <div class="menu-panel-header">
+          <img src="img/menu/sprites.png" alt="Alcolici">
+          <h3>Alcolici</h3>
+        </div>
+        <div class="menu-items-grid">
+          <div class="menu-item">Whisky Single Malt</div>
+          <div class="menu-item">Rum Invecchiato</div>
+          <div class="menu-item">Tequila Reposado</div>
+          <div class="menu-item">Gin London Dry</div>
+          <div class="menu-item">Champagne Millesimato</div>
+          <div class="menu-item">Brandy XO</div>
+          <div class="menu-item">Grappa Artigianale</div>
+          <div class="menu-item">Amaro della Casa</div>
+        </div>
       </div>
     </div>
   </div>
@@ -733,6 +835,16 @@
   ham.addEventListener('click', () => drawer.classList.add('open'));
   document.getElementById('drawer-close').addEventListener('click', () => drawer.classList.remove('open'));
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => drawer.classList.remove('open')));
+
+  // Menu tabs
+  document.querySelectorAll('.menu-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
 
   // Booking form demo
   function handleBook(e) {
